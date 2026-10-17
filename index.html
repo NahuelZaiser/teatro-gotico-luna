@@ -217,8 +217,17 @@
         }
 
         .intertitle-backdrop > div {
+            width: min(88vw, 54rem);
+            max-width: 54rem;
             max-height: min(78vh, 620px);
             overflow: hidden;
+            padding: clamp(1.2rem, 1.6vw, 2.2rem);
+            border-radius: 1.8rem;
+        }
+
+        #intertitle-overlay .frame-corner {
+            width: 2.2rem;
+            height: 2.2rem;
         }
 
         #act-title {
@@ -256,9 +265,10 @@
             }
 
             .intertitle-backdrop > div {
-                padding: 1.2rem 0.9rem 1.4rem !important;
-                width: min(92vw, 32rem) !important;
+                padding: 1.15rem 0.9rem 1.35rem !important;
+                width: min(92vw, 34rem) !important;
                 max-height: min(82vh, 540px);
+                border-radius: 1.4rem !important;
             }
 
             .intertitle-backdrop p,
@@ -961,11 +971,11 @@
         <div class="absolute bottom-0 inset-x-0 h-24 footlight z-20 pointer-events-none"></div>
 
         <div id="intertitle-overlay" class="intertitle-backdrop intertitle-hidden absolute inset-0 z-30 flex items-center justify-center p-4">
-            <div class="max-w-xl w-full bg-[#090414]/95 border-2 border-yellow-500/80 rounded-3xl p-6 sm:p-9 text-center shadow-[0_0_90px_rgba(0,0,0,0.98)] relative overflow-hidden">
-                <div class="absolute top-3 left-3 w-7 h-7 border-t-2 border-l-2 border-yellow-400/80 rounded-tl-md"></div>
-                <div class="absolute top-3 right-3 w-7 h-7 border-t-2 border-r-2 border-yellow-400/80 rounded-tr-md"></div>
-                <div class="absolute bottom-3 left-3 w-7 h-7 border-b-2 border-l-2 border-yellow-400/80 rounded-bl-md"></div>
-                <div class="absolute bottom-3 right-3 w-7 h-7 border-b-2 border-r-2 border-yellow-400/80 rounded-br-md"></div>
+            <div class="w-full bg-[#090414]/95 border-2 border-yellow-500/80 rounded-[1.8rem] text-center shadow-[0_0_90px_rgba(0,0,0,0.98)] relative overflow-hidden">
+                <div class="frame-corner absolute top-3 left-3 border-t-2 border-l-2 border-yellow-400/80 rounded-tl-md"></div>
+                <div class="frame-corner absolute top-3 right-3 border-t-2 border-r-2 border-yellow-400/80 rounded-tr-md"></div>
+                <div class="frame-corner absolute bottom-3 left-3 border-b-2 border-l-2 border-yellow-400/80 rounded-bl-md"></div>
+                <div class="frame-corner absolute bottom-3 right-3 border-b-2 border-r-2 border-yellow-400/80 rounded-br-md"></div>
 
                 <div class="flex items-center justify-center gap-3 mb-2">
                     <span class="h-[1px] w-12 bg-gradient-to-r from-transparent to-yellow-400/70"></span>
@@ -1042,7 +1052,7 @@
             </div>
         </div>
 
-        <div id="celebration-overlay" class="hidden absolute top-3 inset-x-0 z-30 flex justify-center px-4 pointer-events-none">
+        <div id="celebration-overlay" class="hidden absolute top-3 inset-x-0 z-30 flex justify-center px-4 pointer-events-auto">
             <div class="pointer-events-auto max-w-md w-full bg-gradient-to-b from-[#170929]/90 to-[#080312]/90 border-2 border-yellow-400/90 rounded-2xl p-4 text-center shadow-[0_0_55px_rgba(250,204,21,0.4)] backdrop-blur-md relative">
                 <button onclick="document.getElementById('celebration-overlay').classList.add('hidden')" class="absolute top-2.5 right-3 text-purple-300 hover:text-yellow-300 text-xs flex items-center gap-1" title="Ocultar cartel para ver la escena limpia">
                     <i class="ph ph-eye"></i> Ver Escena
@@ -1896,10 +1906,13 @@ const JACK_MUSIC_START_SECONDS = 0;
             const overlay = document.getElementById('celebration-overlay');
             const proposalWrapper = document.getElementById('proposal-cta-wrapper');
             if (proposalWrapper) proposalWrapper.classList.add('hidden');
+            if (overlay) {
+                overlay.classList.remove('hidden');
+                overlay.style.pointerEvents = 'auto';
+            }
 
             document.getElementById('celebration-title').textContent = 'Gracias por aceptarme amor';
             document.getElementById('celebration-message').textContent = 'Te amo mucho en serio, quiero que tengas un feliz cumpleaños.';
-            overlay.classList.remove('hidden');
 
             triggerFireworkBurst();
         }
