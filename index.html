@@ -221,6 +221,20 @@
             overflow: hidden;
         }
 
+        #act-title {
+            font-size: clamp(1.5rem, 2.6vw, 3rem);
+            line-height: 1.12;
+            letter-spacing: 0.04em;
+            text-wrap: balance;
+        }
+
+        #act-text {
+            font-size: clamp(1rem, 2.15vw, 2rem);
+            line-height: 1.55;
+            letter-spacing: 0.02em;
+            text-wrap: pretty;
+        }
+
         .intertitle-hidden {
             opacity: 0 !important;
             visibility: hidden !important;
@@ -242,13 +256,24 @@
             }
 
             .intertitle-backdrop > div {
-                padding: 1.25rem 1rem !important;
+                padding: 1.2rem 0.9rem 1.4rem !important;
                 width: min(92vw, 32rem) !important;
+                max-height: min(82vh, 540px);
             }
 
             .intertitle-backdrop p,
             .intertitle-backdrop h2 {
                 word-break: break-word;
+            }
+
+            #act-title {
+                margin-bottom: 0.85rem;
+            }
+
+            #act-text {
+                margin-bottom: 1.3rem;
+                padding-left: 0.2rem !important;
+                padding-right: 0.2rem !important;
             }
         }
 
@@ -274,6 +299,31 @@
 
             #minimal-stage-hud .pointer-events-auto {
                 max-width: 94vw;
+            }
+
+            .intertitle-backdrop > div {
+                width: min(95vw, 28rem) !important;
+                border-radius: 1.45rem !important;
+            }
+
+            #act-badge {
+                letter-spacing: 0.18em !important;
+                font-size: 0.62rem !important;
+            }
+
+            #act-title {
+                font-size: clamp(1.2rem, 5.5vw, 2rem);
+                line-height: 1.18;
+            }
+
+            #act-text {
+                font-size: clamp(0.92rem, 4vw, 1.28rem);
+                line-height: 1.56;
+            }
+
+            #intertitle-overlay .btn-accept {
+                width: 100%;
+                justify-content: center;
             }
         }
 
@@ -957,7 +1007,7 @@
             <div id="proposal-cta-wrapper" class="hidden pointer-events-auto mb-0.5">
                 <button onclick="acceptProposal()" class="btn-accept px-6 py-2 rounded-full font-gothic-title text-sm sm:text-base text-yellow-100 font-bold tracking-wider flex items-center gap-2 shadow-2xl">
                     <i class="ph-fill ph-heart text-rose-400 text-lg animate-bounce"></i>
-                    <span>💍 ¡Sí, acepto por siempre!</span>
+                    <span>💍 Si acepto hoy por siempre</span>
                     <i class="ph-fill ph-sparkle text-yellow-300"></i>
                 </button>
             </div>
@@ -1844,8 +1894,11 @@ const JACK_MUSIC_START_SECONDS = 0;
             playCelebrationChime();
 
             const overlay = document.getElementById('celebration-overlay');
-            document.getElementById('celebration-title').textContent = `¡${groomName} & ${brideName}, Amor Eterno!`;
-            document.getElementById('celebration-message').textContent = `"${customFinalMessage}"`;
+            const proposalWrapper = document.getElementById('proposal-cta-wrapper');
+            if (proposalWrapper) proposalWrapper.classList.add('hidden');
+
+            document.getElementById('celebration-title').textContent = 'Gracias por aceptarme amor';
+            document.getElementById('celebration-message').textContent = 'Te amo mucho en serio, quiero que tengas un feliz cumpleaños.';
             overlay.classList.remove('hidden');
 
             triggerFireworkBurst();
