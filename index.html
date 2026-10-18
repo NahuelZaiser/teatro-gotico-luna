@@ -1013,9 +1013,9 @@
             </div>
         </div>
 
-        <div id="minimal-stage-hud" class="absolute bottom-2.5 inset-x-0 z-25 flex flex-col items-center gap-2 px-3 pointer-events-none opacity-0 transition-opacity duration-700">
-            <div id="proposal-cta-wrapper" class="hidden pointer-events-auto mb-0.5">
-                <button onclick="acceptProposal()" class="btn-accept px-6 py-2 rounded-full font-gothic-title text-sm sm:text-base text-yellow-100 font-bold tracking-wider flex items-center gap-2 shadow-2xl">
+        <div id="minimal-stage-hud" class="absolute bottom-2.5 inset-x-0 z-40 flex flex-col items-center gap-2 px-3 pointer-events-none opacity-0 transition-opacity duration-700">
+            <div id="proposal-cta-wrapper" class="hidden pointer-events-auto mb-0.5 relative z-50">
+                <button type="button" onclick="acceptProposal()" class="btn-accept px-6 py-2 rounded-full font-gothic-title text-sm sm:text-base text-yellow-100 font-bold tracking-wider flex items-center gap-2 shadow-2xl cursor-pointer">
                     <i class="ph-fill ph-heart text-rose-400 text-lg animate-bounce"></i>
                     <span>💍 Si acepto hoy por siempre</span>
                     <i class="ph-fill ph-sparkle text-yellow-300"></i>
@@ -1054,7 +1054,7 @@
 
         <div id="celebration-overlay" class="hidden absolute top-3 inset-x-0 z-30 flex justify-center px-4 pointer-events-auto">
             <div class="pointer-events-auto max-w-md w-full bg-gradient-to-b from-[#170929]/90 to-[#080312]/90 border-2 border-yellow-400/90 rounded-2xl p-4 text-center shadow-[0_0_55px_rgba(250,204,21,0.4)] backdrop-blur-md relative">
-                <button onclick="document.getElementById('celebration-overlay').classList.add('hidden')" class="absolute top-2.5 right-3 text-purple-300 hover:text-yellow-300 text-xs flex items-center gap-1" title="Ocultar cartel para ver la escena limpia">
+                <button onclick="closeCelebrationOverlay()" class="absolute top-2.5 right-3 text-purple-300 hover:text-yellow-300 text-xs flex items-center gap-1" title="Ocultar cartel para ver la escena limpia">
                     <i class="ph ph-eye"></i> Ver Escena
                 </button>
                 <h3 id="celebration-title" class="font-gothic-title text-lg sm:text-xl text-yellow-200 mb-1">
@@ -1123,7 +1123,7 @@
 
     <div id="customize-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="max-w-md w-full bg-[#100821] border-2 border-yellow-500/70 rounded-2xl p-6 shadow-2xl relative">
-            <button onclick="closeCustomizeModal()" class="absolute top-4 right-4 text-purple-300 hover:text-yellow-300">
+            <button onclick="proposalFlowPending = false; closeCustomizeModal()" class="absolute top-4 right-4 text-purple-300 hover:text-yellow-300">
                 <i class="ph ph-x text-xl"></i>
             </button>
 
@@ -1175,6 +1175,8 @@
         let isIntertitleOpen = false;
         let isCelebrationActive = false;
         let autoplayEnabled = false;
+        let proposalFlowPending = false;
+        let proposalReadyToShow = false;
         let autoplayTimer = null;
         let intertitleTimer = null;
         let proposalButtonTimer = null;
@@ -1182,6 +1184,7 @@
         let actTransitionLock = false;
         const INTERTITLE_READ_MS = 14000;
         const SCENE_VIEW_MS = 7000;
+        const PROPOSAL_BUTTON_DELAY_MS = 4000;
         const JACK_MUSIC_FILE = "./Cancion%20de%20Jack.m4a";
         // Se mantiene la m?sica fuera del HTML para evitar un script gigantesco y fallos de parseo.
 const JACK_MUSIC_START_SECONDS = 0;
@@ -1191,6 +1194,8 @@ const JACK_MUSIC_START_SECONDS = 0;
             clearTimeout(intertitleTimer);
             clearTimeout(autoplayTimer);
             clearTimeout(proposalButtonTimer);
+            proposalReadyToShow = false;
+            proposalFlowPending = false;
         }
 
         function playJackFallbackTheme() {
@@ -1546,6 +1551,57 @@ const JACK_MUSIC_START_SECONDS = 0;
             }, 1150);
         }
 
+        function isCustomizeModalOpen() {
+            const modal = document.getElementById('customize-modal');
+            return !!modal && !modal.classList.contains('hidden');
+        }
+
+        function setCustomizeModalState(isOpen) {
+            const modal = document.getElementById('customize-modal');
+            if (!modal) return;
+
+            modal.classList.toggle('hidden', !isOpen);
+            modal.style.display = isOpen ? 'flex' : 'none';
+            modal.style.opacity = isOpen ? '1' : '0';
+            modal.setAttribute('aria-hidden', String(!isOpen));
+            syncProposalVisibility();
+        }
+
+        function showProposalCTA() {
+            const proposalWrapper = document.getElementById('proposal-cta-wrapper');
+            if (!proposalWrapper) return;
+
+            proposalWrapper.classList.remove('hidden');
+            proposalWrapper.style.display = 'block';
+            proposalWrapper.style.opacity = '1';
+            proposalWrapper.style.pointerEvents = 'auto';
+        }
+
+        function hideProposalCTA() {
+            const proposalWrapper = document.getElementById('proposal-cta-wrapper');
+            if (!proposalWrapper) return;
+
+            proposalWrapper.classList.add('hidden');
+            proposalWrapper.style.display = 'none';
+            proposalWrapper.style.opacity = '0';
+            proposalWrapper.style.pointerEvents = 'none';
+        }
+
+        function syncProposalVisibility() {
+            const proposalWrapper = document.getElementById('proposal-cta-wrapper');
+            if (!proposalWrapper) return;
+
+            const shouldShowProposal = currentAct === 3 && !isCelebrationActive && !proposalFlowPending && proposalReadyToShow;
+            const modalIsOpen = isCustomizeModalOpen();
+            const isVisible = shouldShowProposal || modalIsOpen;
+
+            if (isVisible) {
+                showProposalCTA();
+            } else {
+                hideProposalCTA();
+            }
+        }
+
         function renderAct(index) {
             if (index < 0 || index > 3) return;
             if (actTransitionLock && index === currentAct) return;
@@ -1589,9 +1645,10 @@ const JACK_MUSIC_START_SECONDS = 0;
                 nextBtn.classList.add('hidden');
             }
 
-            document.getElementById('proposal-cta-wrapper').classList.add('hidden');
-            document.getElementById('celebration-overlay').classList.add('hidden');
+            const celebrationOverlay = document.getElementById('celebration-overlay');
+            if (celebrationOverlay) celebrationOverlay.classList.add('hidden');
             isCelebrationActive = false;
+            syncProposalVisibility();
 
             if (index === 3) {
                 activeRigTarget = { ...rigTargetsByAct[3] };
@@ -1656,6 +1713,7 @@ const JACK_MUSIC_START_SECONDS = 0;
             const sallyBlush = document.getElementById('sally-blush');
             const floatingEmotions = document.getElementById('floating-emotions');
             const hillFlowers = document.getElementById('hill-flowers');
+            const proposalWrapper = document.getElementById('proposal-cta-wrapper');
 
             jackRoot.style.transition = "opacity 1.2s ease";
             sallyRoot.style.transition = "opacity 1.2s ease";
@@ -1685,6 +1743,7 @@ const JACK_MUSIC_START_SECONDS = 0;
                 sallyRoot.setAttribute('opacity', '1');
                 hillFlowers.setAttribute('opacity', '1');
                 startJackSong(JACK_MUSIC_START_SECONDS);
+                proposalReadyToShow = false;
 
                 setTimeout(() => {
                     if (currentAct === 3 && !isIntertitleOpen) {
@@ -1698,12 +1757,27 @@ const JACK_MUSIC_START_SECONDS = 0;
 
                 clearTimeout(proposalButtonTimer);
                 proposalButtonTimer = setTimeout(() => {
-                    if (currentAct === 3) {
-                        document.getElementById('proposal-cta-wrapper').classList.remove('hidden');
+                    if (currentAct === 3 && !isCelebrationActive && !proposalFlowPending) {
+                        proposalReadyToShow = true;
+                        if (proposalWrapper) {
+                            proposalWrapper.classList.remove('hidden');
+                            proposalWrapper.style.display = 'block';
+                            proposalWrapper.style.opacity = '1';
+                            proposalWrapper.style.pointerEvents = 'auto';
+                        }
+                        syncProposalVisibility();
                     }
-                }, 1350);
+                }, PROPOSAL_BUTTON_DELAY_MS);
             }
 
+            if (proposalWrapper && currentAct === 3 && !isCelebrationActive && !proposalFlowPending && proposalReadyToShow) {
+                proposalWrapper.classList.remove('hidden');
+                proposalWrapper.style.display = 'block';
+                proposalWrapper.style.opacity = '1';
+                proposalWrapper.style.pointerEvents = 'auto';
+            }
+
+            syncProposalVisibility();
             scheduleAutoplay();
         }
 
@@ -1900,21 +1974,58 @@ const JACK_MUSIC_START_SECONDS = 0;
         }
 
         function acceptProposal() {
-            isCelebrationActive = true;
-            playCelebrationChime();
+            if (!showStarted) return;
+            if (isCelebrationActive) return;
+            if (currentAct !== 3) return;
+            if (proposalFlowPending) return;
+            if (!proposalReadyToShow) return;
 
-            const overlay = document.getElementById('celebration-overlay');
-            const proposalWrapper = document.getElementById('proposal-cta-wrapper');
-            if (proposalWrapper) proposalWrapper.classList.add('hidden');
-            if (overlay) {
-                overlay.classList.remove('hidden');
-                overlay.style.pointerEvents = 'auto';
+            clearTimeout(proposalButtonTimer);
+            currentAct = 3;
+            isCelebrationActive = true;
+            proposalFlowPending = false;
+            proposalReadyToShow = false;
+
+            playCelebrationChime();
+            triggerFireworkBurst();
+
+            const celebrationOverlay = document.getElementById('celebration-overlay');
+            const celebrationTitle = document.getElementById('celebration-title');
+            const celebrationMessage = document.getElementById('celebration-message');
+
+            if (celebrationTitle) {
+                celebrationTitle.textContent = `¡${groomName} & ${brideName}, Amor Eterno!`;
+            }
+            if (celebrationMessage) {
+                celebrationMessage.textContent = `"${customFinalMessage}"`;
             }
 
-            document.getElementById('celebration-title').textContent = 'Gracias por aceptarme amor';
-            document.getElementById('celebration-message').textContent = 'Te amo mucho en serio, quiero que tengas un feliz cumpleaños.';
+            if (celebrationOverlay) {
+                celebrationOverlay.classList.remove('hidden');
+            }
 
-            triggerFireworkBurst();
+            const proposalWrapper = document.getElementById('proposal-cta-wrapper');
+            if (proposalWrapper) {
+                proposalWrapper.classList.add('hidden');
+                proposalWrapper.style.display = 'none';
+                proposalWrapper.style.pointerEvents = 'none';
+                proposalWrapper.style.opacity = '0';
+            }
+
+            syncProposalVisibility();
+        }
+
+        function closeCelebrationOverlay() {
+            const celebrationOverlay = document.getElementById('celebration-overlay');
+            if (celebrationOverlay) {
+                celebrationOverlay.classList.add('hidden');
+            }
+
+            clearTimeout(proposalButtonTimer);
+            isCelebrationActive = false;
+            proposalFlowPending = false;
+            proposalReadyToShow = false;
+            syncProposalVisibility();
         }
 
         function replayStory() {
@@ -1927,14 +2038,26 @@ const JACK_MUSIC_START_SECONDS = 0;
         }
 
         function openCustomizeModal() {
-            document.getElementById('input-groom').value = groomName;
-            document.getElementById('input-bride').value = brideName;
-            document.getElementById('input-custom-msg').value = customFinalMessage;
-            document.getElementById('customize-modal').classList.remove('hidden');
+            const modal = document.getElementById('customize-modal');
+            if (!modal || !showStarted) return;
+
+            const inputs = {
+                groom: document.getElementById('input-groom'),
+                bride: document.getElementById('input-bride'),
+                msg: document.getElementById('input-custom-msg')
+            };
+
+            if (inputs.groom) inputs.groom.value = groomName;
+            if (inputs.bride) inputs.bride.value = brideName;
+            if (inputs.msg) inputs.msg.value = customFinalMessage;
+
+            proposalFlowPending = true;
+            setCustomizeModalState(true);
         }
 
         function closeCustomizeModal() {
-            document.getElementById('customize-modal').classList.add('hidden');
+            proposalFlowPending = false;
+            setCustomizeModalState(false);
         }
 
         function saveCustomization() {
@@ -1975,15 +2098,15 @@ const JACK_MUSIC_START_SECONDS = 0;
             stars = [];
             constellations = [];
             fireflies = [];
-            const numStars = Math.floor((canvas.width * canvas.height) / 4800);
+            const numStars = Math.max(42, Math.floor((canvas.width * canvas.height) / 7200));
             for (let i = 0; i < numStars; i++) {
                 stars.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * (canvas.height * 0.78),
-                    r: Math.random() * 2.2 + 0.7,
-                    alpha: Math.random() * 0.9 + 0.2,
-                    speed: Math.random() * 0.024 + 0.008,
-                    isCrossStar: Math.random() < 0.22,
+                    r: Math.random() * 1.6 + 0.45,
+                    alpha: Math.random() * 0.75 + 0.12,
+                    speed: Math.random() * 0.018 + 0.006,
+                    isCrossStar: Math.random() < 0.14,
                     hue: Math.random() > 0.82 ? '#a5b4fc' : Math.random() > 0.5 ? '#fef3c7' : '#e2e8f0'
                 });
             }
