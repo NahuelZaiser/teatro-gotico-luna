@@ -667,11 +667,6 @@
             30% { opacity: 1; transform: translate(calc(-50% + var(--dx) * 0.5), calc(-50% + var(--dy) * 0.5)) scale(1.1) rotate(60deg); }
             100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.2) rotate(160deg); }
         }
-        @media (prefers-reduced-motion: reduce) {
-            .magic-char { opacity: 1; }
-            .magic-char.is-on { animation: none; }
-            .magic-quill, .magic-spark { display: none; }
-        }
 
         /* Cursor de escritura para el mensaje final */
         .is-typing::after {
@@ -697,7 +692,6 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .ink-letter { animation: none; opacity: 1; filter: none; transform: none; }
             .act-frame .act-frame-outer { animation: none; }
             .is-typing::after { animation: none; }
         }
