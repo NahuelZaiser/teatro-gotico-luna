@@ -641,14 +641,36 @@
             position: absolute;
             left: 0;
             top: 0;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
+            width: 30px;
+            height: 30px;
             pointer-events: none;
             opacity: 0;
-            background: radial-gradient(circle, #ffffff 0%, #fef08a 35%, rgba(250, 204, 21, 0) 70%);
-            box-shadow: 0 0 10px 3px rgba(254, 240, 138, 0.75);
+            background: radial-gradient(circle, #ffffff 0 1.5px, rgba(254, 249, 195, 0.8) 3px, rgba(253, 224, 71, 0.2) 9px, transparent 15px);
             transition: transform 0.14s linear, opacity 0.9s ease;
+        }
+        .magic-quill::before,
+        .magic-quill::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            animation: magicTwinkle 0.9s ease-in-out infinite;
+        }
+        .magic-quill::before {
+            width: 28px;
+            height: 1.5px;
+            margin: -0.75px 0 0 -14px;
+            background: linear-gradient(90deg, transparent, #fffbeb, transparent);
+        }
+        .magic-quill::after {
+            width: 1.5px;
+            height: 28px;
+            margin: -14px 0 0 -0.75px;
+            background: linear-gradient(180deg, transparent, #fffbeb, transparent);
+        }
+        @keyframes magicTwinkle {
+            0%, 100% { transform: scale(0.5); opacity: 0.4; }
+            50% { transform: scale(1); opacity: 1; }
         }
         .magic-quill.is-active { opacity: 1; }
         .magic-quill.is-done { opacity: 0; }
@@ -2472,7 +2494,7 @@ const JACK_MUSIC_START_SECONDS = 0;
 
             const moveQuill = span => {
                 quill.classList.add('is-active');
-                quill.style.transform = `translate(${span.offsetLeft + span.offsetWidth - 2}px, ${span.offsetTop + span.offsetHeight / 2 - 6}px)`;
+                quill.style.transform = `translate(${span.offsetLeft + span.offsetWidth - 15}px, ${span.offsetTop + span.offsetHeight / 2 - 15}px)`;
             };
             const spawnSpark = span => {
                 const spark = document.createElement('span');
@@ -2496,7 +2518,7 @@ const JACK_MUSIC_START_SECONDS = 0;
                 const span = letters[index++];
                 span.classList.add('is-on');
                 moveQuill(span);
-                if (index % 3 === 0 || /[.,!?💖]/.test(span.textContent)) spawnSpark(span);
+                if (Math.random() < 0.6 || /[.,!?💖]/.test(span.textContent)) spawnSpark(span);
             }, speedMs);
         }
 
