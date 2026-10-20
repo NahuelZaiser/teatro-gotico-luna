@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Sinfonía Bajo la Luna en Espiral - Teatro Gótico Interactivo</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind CSS compilado en local (regenerar con: npm run build:css) -->
+    <link rel="stylesheet" href="tailwind.css">
     <!-- Google Fonts: Tipografías Góticas, Teatrales y Poéticas -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
     <!-- Iconos Phosphor -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
@@ -48,14 +48,17 @@
         }
 
         .font-gothic-title {
-            font-family: 'Cinzel Decorative', cursive;
+            font-family: 'Cinzel', serif;
         }
 
         /* =====================================================
            CORTINAS DE TERCIOPELO REALISTAS Y PROSCENIO BARROCO
         ===================================================== */
         .curtain-panel {
-            background: repeating-linear-gradient(
+            background:
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='v'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23v)'/%3E%3C/svg%3E"),
+                linear-gradient(90deg, rgba(0, 0, 0, 0.55) 0%, transparent 16%, rgba(255, 190, 150, 0.06) 50%, transparent 84%, rgba(0, 0, 0, 0.55) 100%),
+                repeating-linear-gradient(
                 90deg,
                 #120106 0%,
                 #380412 4%,
@@ -425,6 +428,88 @@
             text-wrap: pretty;
         }
 
+        /* Marco ornamental SVG con brillo lento */
+        .act-frame {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: visible;
+        }
+        .act-frame rect {
+            fill: none;
+            stroke: url(#actFrameGold);
+            vector-effect: non-scaling-stroke;
+        }
+        .act-frame .act-frame-outer {
+            x: 1px;
+            y: 1px;
+            width: calc(100% - 2px);
+            height: calc(100% - 2px);
+            stroke-width: 1.6;
+            animation: actFrameGlow 5.5s ease-in-out infinite;
+        }
+        .act-frame .act-frame-inner {
+            x: 9px;
+            y: 9px;
+            width: calc(100% - 18px);
+            height: calc(100% - 18px);
+            stroke-width: 0.8;
+            stroke-dasharray: 6 5;
+            opacity: 0.5;
+        }
+        @keyframes actFrameGlow {
+            0%, 100% { opacity: 0.7; filter: drop-shadow(0 0 2px rgba(250, 204, 21, 0.35)); }
+            50% { opacity: 1; filter: drop-shadow(0 0 12px rgba(250, 204, 21, 0.95)); }
+        }
+
+        /* Revelado de tinta letra a letra con degradado dorado */
+        .ink-letter {
+            display: inline-block;
+            color: transparent;
+            -webkit-text-fill-color: transparent;
+            background: linear-gradient(180deg, #fffbeb 0%, #fde68a 45%, #d97706 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            opacity: 0;
+            filter: blur(8px);
+            transform: translateY(0.18em) scale(1.12);
+            animation: inkIn 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+        }
+        @keyframes inkIn {
+            to { opacity: 1; filter: blur(0); transform: none; }
+        }
+
+        /* Cursor de escritura para el mensaje final */
+        .is-typing::after {
+            content: '\258D';
+            margin-left: 2px;
+            color: #fde68a;
+            animation: caretBlink 0.9s steps(2, start) infinite;
+        }
+        @keyframes caretBlink {
+            to { visibility: hidden; }
+        }
+
+        /* Brillo vivo en los ojos de Sally */
+        .eye-glint {
+            transform-box: fill-box;
+            transform-origin: center;
+            animation: eyeGlint 4.6s ease-in-out infinite;
+        }
+        @keyframes eyeGlint {
+            0%, 100% { opacity: 0.85; transform: scale(1); }
+            45% { opacity: 1; transform: scale(1.35); }
+            55% { opacity: 0.9; transform: scale(1.05); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .ink-letter { animation: none; opacity: 1; filter: none; transform: none; }
+            .act-frame .act-frame-outer { animation: none; }
+            .is-typing::after { animation: none; }
+        }
+
         .intertitle-hidden {
             opacity: 0 !important;
             visibility: hidden !important;
@@ -567,7 +652,7 @@
             50% { transform: rotate(1.8deg) skewX(-1.5deg); }
         }
 
-        #sally-hair-back,
+        /* El cabello trasero (#sally-hair-back) se balancea desde updateRigKinematics() */
         #sally-head path[fill*="sallyAuburnHair"] {
             transform-origin: 25px -20px;
             animation: hairBreeze 4.5s ease-in-out infinite alternate;
@@ -609,7 +694,7 @@
         }
 
         #stage-wrapper::after {
-            box-shadow: inset 0 0 0 2px rgba(250, 204, 21, 0.2), inset 0 0 48px rgba(5, 2, 12, 0.65);
+            box-shadow: inset 0 0 0 2px rgba(250, 204, 21, 0.2), inset 0 0 110px rgba(5, 2, 12, 0.78);
         }
 
         #stage-svg {
@@ -707,9 +792,112 @@
         #hill-flowers g:nth-child(3) {
             animation-delay: 2.4s;
         }
+
+        /* =====================================================
+           PANTALLA DE CARGA (luna en espiral)
+        ===================================================== */
+        #boot-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 1.25rem;
+            background: radial-gradient(circle at 50% 40%, #1a0b33 0%, #02040b 70%);
+            transition: opacity 0.9s ease, visibility 0.9s ease;
+        }
+
+        #boot-screen.is-done {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        #boot-moon {
+            font-size: 3.5rem;
+            color: var(--moon-yellow);
+            filter: drop-shadow(0 0 18px rgba(250, 204, 21, 0.7));
+            animation: bootMoonPulse 2.4s ease-in-out infinite;
+        }
+
+        #boot-text {
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.3em;
+            color: rgba(254, 240, 138, 0.8);
+            text-transform: uppercase;
+        }
+
+        #boot-bar {
+            width: min(60vw, 260px);
+            height: 2px;
+            border-radius: 2px;
+            background: rgba(250, 204, 21, 0.15);
+            overflow: hidden;
+        }
+
+        #boot-bar::after {
+            content: '';
+            display: block;
+            height: 100%;
+            width: 40%;
+            background: linear-gradient(90deg, transparent, var(--moon-glow), transparent);
+            animation: bootSweep 1.6s ease-in-out infinite;
+        }
+
+        @keyframes bootMoonPulse {
+            0%, 100% { opacity: 0.6; transform: scale(0.96); }
+            50% { opacity: 1; transform: scale(1.04); }
+        }
+
+        @keyframes bootSweep {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(260%); }
+        }
+
+        /* =====================================================
+           FOCO DEL ESCENARIO Y VELO ENTRE ACTOS
+        ===================================================== */
+        .stage-spot {
+            position: absolute;
+            inset: 0;
+            z-index: 15;
+            pointer-events: none;
+            opacity: 0;
+            background:
+                radial-gradient(ellipse 34% 62% at 50% 0%, rgba(254, 240, 138, 0.30), transparent 70%),
+                radial-gradient(ellipse 70% 45% at 50% 100%, rgba(147, 51, 234, 0.14), transparent 70%);
+            mix-blend-mode: screen;
+            transition: opacity 2.2s ease;
+        }
+
+        .stage-spot.is-lit {
+            opacity: 1;
+        }
+
+        .act-veil {
+            position: absolute;
+            inset: 0;
+            z-index: 30;
+            pointer-events: none;
+            background: #02040b;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .act-veil.is-dark {
+            opacity: 0.8;
+        }
     </style>
 </head>
 <body class="h-[100dvh] w-full flex flex-col justify-between relative select-none overflow-hidden">
+    <div id="boot-screen" aria-hidden="true">
+        <i id="boot-moon" class="ph-fill ph-moon-stars"></i>
+        <p id="boot-text">Preparando el teatro</p>
+        <div id="boot-bar"></div>
+    </div>
     <div class="scene-noise"></div>
     <div class="glitch-layer"></div>
 
@@ -750,6 +938,8 @@
     =========================================== -->
     <main id="stage-wrapper" class="relative flex-1 w-full h-full overflow-hidden flex items-center justify-center bg-[#040208]">
         <div class="portal-sheen absolute inset-0 z-10 pointer-events-none"></div>
+        <div id="stage-spot" class="stage-spot"></div>
+        <div id="act-veil" class="act-veil"></div>
         <div class="sky-sprinkles"></div>
         <canvas id="sky-canvas" class="absolute inset-0 w-full h-full z-[14] pointer-events-none"></canvas>
         <div id="ring-spotlight">
@@ -1203,8 +1393,8 @@
                                     <path d="M 0,-15.5 C 2.2,-21 8.5,-21 10.5,-15.5 C 8.5,-10.5 2.2,-10.5 0,-15.5 Z" fill="#ffffff" stroke="#09090b" stroke-width="1.2" />
                                     <circle cx="-7.5" cy="-15.5" r="2.1" fill="#09090b" />
                                     <circle cx="3.8" cy="-15.5" r="2.1" fill="#09090b" />
-                                    <circle cx="-8.2" cy="-16.5" r="0.95" fill="#ffffff" />
-                                    <circle cx="3.1" cy="-16.5" r="0.95" fill="#ffffff" />
+                                    <circle cx="-8.2" cy="-16.5" r="0.95" fill="#ffffff" class="eye-glint" />
+                                    <circle cx="3.1" cy="-16.5" r="0.95" fill="#ffffff" class="eye-glint" />
                                     <circle cx="-6.5" cy="-14.5" r="0.5" fill="#fef08a" />
                                     <circle cx="4.8" cy="-14.5" r="0.5" fill="#fef08a" />
                                 </g>
@@ -1278,6 +1468,17 @@
 
         <div id="intertitle-overlay" class="intertitle-backdrop intertitle-hidden absolute inset-0 z-40 flex items-center justify-center p-4">
             <div class="w-full bg-[#090414]/95 border-2 border-yellow-500/80 rounded-[1.8rem] text-center shadow-[0_0_90px_rgba(0,0,0,0.98)] relative overflow-hidden">
+                <svg class="act-frame" aria-hidden="true" focusable="false">
+                    <defs>
+                        <linearGradient id="actFrameGold" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0" stop-color="#fef3c7" />
+                            <stop offset="0.5" stop-color="#d4af37" />
+                            <stop offset="1" stop-color="#92400e" />
+                        </linearGradient>
+                    </defs>
+                    <rect class="act-frame-outer" />
+                    <rect class="act-frame-inner" />
+                </svg>
                 <div class="frame-corner absolute top-3 left-3 border-t-2 border-l-2 border-yellow-400/80 rounded-tl-md"></div>
                 <div class="frame-corner absolute top-3 right-3 border-t-2 border-r-2 border-yellow-400/80 rounded-tr-md"></div>
                 <div class="frame-corner absolute bottom-3 left-3 border-b-2 border-l-2 border-yellow-400/80 rounded-bl-md"></div>
@@ -1785,24 +1986,63 @@ const JACK_MUSIC_START_SECONDS = 0;
                 const sallyHeadRotation = (rigCurrent.sallyHeadAngle + sallyHeadIdle * 0.85).toFixed(2);
                 sallyHeadEl.setAttribute('transform', `translate(31, 32) rotate(${sallyHeadRotation})`);
             }
+
+            // Respiración leve de Sally y balanceo del cabello (pivote en la nuca)
+            const sallyFloatEl = document.getElementById('sally-float');
+            const sallyHairEl = document.getElementById('sally-hair-back');
+            const sallyBreath = Math.sin(time * 0.0026);
+            if (sallyFloatEl) {
+                sallyFloatEl.setAttribute('transform', `translate(0, ${(sallyBreath * 0.9).toFixed(2)}) scale(1, ${(1 + sallyBreath * 0.004).toFixed(4)})`);
+            }
+            if (sallyHairEl) {
+                sallyHairEl.setAttribute('transform', `rotate(${(breeze * 0.7 + sallyHeadIdle * 0.25).toFixed(2)} 30 10)`);
+            }
         }
 
         let mouseX = 0;
         let mouseY = 0;
         let currentParallaxX = 0;
         let currentParallaxY = 0;
+        let gyroBaseBeta = null;
+        let gyroBaseGamma = null;
+        let gyroRequested = false;
 
         window.addEventListener('mousemove', (e) => {
             mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
             mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
         });
 
-        window.addEventListener('deviceorientation', (e) => {
-            if (e.gamma !== null && e.beta !== null) {
-                mouseX = Math.max(-1, Math.min(1, e.gamma / 30));
-                mouseY = Math.max(-1, Math.min(1, (e.beta - 45) / 30));
+        // Giroscopio calibrado a la postura inicial del móvil (rango limitado y suavizado por updateParallax)
+        function handleDeviceOrientation(e) {
+            if (e.gamma === null || e.beta === null) return;
+            if (gyroBaseBeta === null) {
+                gyroBaseBeta = e.beta;
+                gyroBaseGamma = e.gamma;
             }
-        }, true);
+            mouseX = Math.max(-1, Math.min(1, (e.gamma - gyroBaseGamma) / 25));
+            mouseY = Math.max(-1, Math.min(1, (e.beta - gyroBaseBeta) / 25));
+        }
+
+        // iOS exige permiso explícito desde un gesto del usuario; en Android basta con escuchar
+        function enableGyroParallax() {
+            if (gyroRequested || !('DeviceOrientationEvent' in window)) return;
+            if (!window.matchMedia('(pointer: coarse)').matches) return;
+            gyroRequested = true;
+
+            const attach = () => {
+                gyroBaseBeta = null;
+                gyroBaseGamma = null;
+                window.addEventListener('deviceorientation', handleDeviceOrientation, true);
+            };
+
+            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                DeviceOrientationEvent.requestPermission()
+                    .then((state) => { if (state === 'granted') attach(); })
+                    .catch(() => { /* sin permiso: se mantiene el parallax táctil/ratón */ });
+            } else {
+                attach();
+            }
+        }
 
         function updateParallax() {
             currentParallaxX += (mouseX - currentParallaxX) * 0.05;
@@ -1828,6 +2068,7 @@ const JACK_MUSIC_START_SECONDS = 0;
         function startTheaterShow() {
             if (showStarted) return;
             initAudio();
+            enableGyroParallax();
             showStarted = true;
             actTransitionLock = false;
             resetJackSong();
@@ -1844,6 +2085,7 @@ const JACK_MUSIC_START_SECONDS = 0;
             plaque.classList.add('opacity-0', 'scale-95', 'pointer-events-none');
             curtainLeft.classList.add('curtain-open-left');
             curtainRight.classList.add('curtain-open-right');
+            document.getElementById('stage-spot')?.classList.add('is-lit');
 
             setTimeout(() => {
                 curtainContainer.classList.remove('pointer-events-auto');
@@ -1890,6 +2132,49 @@ const JACK_MUSIC_START_SECONDS = 0;
             }
         }
 
+        let actVeilTimer = null;
+
+        function flashActVeil() {
+            const veil = document.getElementById('act-veil');
+            if (!veil || !showStarted) return;
+            veil.classList.add('is-dark');
+            clearTimeout(actVeilTimer);
+            actVeilTimer = setTimeout(() => veil.classList.remove('is-dark'), 380);
+        }
+
+        // Revelado de tinta: cada letra aparece con retardo escalonado
+        function inkRevealText(el, text) {
+            if (!el) return;
+            el.setAttribute('aria-label', text);
+            el.textContent = '';
+            [...text].forEach((ch, i) => {
+                const span = document.createElement('span');
+                span.className = 'ink-letter';
+                span.style.animationDelay = `${i * 45}ms`;
+                span.textContent = ch === ' ' ? '\u00a0' : ch;
+                el.appendChild(span);
+            });
+        }
+
+        // Escritura progresiva de un texto (mensaje final)
+        let typeWriterTimer = null;
+        function typeWriterText(el, text, speedMs) {
+            if (!el) return;
+            clearInterval(typeWriterTimer);
+            const chars = [...text];
+            let count = 0;
+            el.textContent = '';
+            el.classList.add('is-typing');
+            typeWriterTimer = setInterval(() => {
+                count++;
+                el.textContent = chars.slice(0, count).join('');
+                if (count >= chars.length) {
+                    clearInterval(typeWriterTimer);
+                    el.classList.remove('is-typing');
+                }
+            }, speedMs);
+        }
+
         function renderAct(index) {
             if (index < 0 || index > 3) return;
             if (actTransitionLock && index === currentAct) return;
@@ -1897,11 +2182,12 @@ const JACK_MUSIC_START_SECONDS = 0;
             resetSceneTimers();
 
             currentAct = index;
+            flashActVeil();
             const acts = getStoryActs();
             const act = acts[index];
 
             document.getElementById('act-badge').textContent = act.badge;
-            document.getElementById('act-title').textContent = act.title;
+            inkRevealText(document.getElementById('act-title'), act.title);
             document.getElementById('act-text').textContent = `"${act.text}"`;
             document.getElementById('hud-act-indicator').textContent = act.shortBadge;
 
@@ -2303,7 +2589,7 @@ const JACK_MUSIC_START_SECONDS = 0;
                 celebrationTitle.textContent = `¡${groomName} & ${brideName}, Amor Eterno!`;
             }
             if (celebrationMessage) {
-                celebrationMessage.textContent = `"${customFinalMessage}"`;
+                typeWriterText(celebrationMessage, `"${customFinalMessage}"`, 42);
             }
 
             if (celebrationOverlay) {
@@ -2343,8 +2629,16 @@ const JACK_MUSIC_START_SECONDS = 0;
             renderAct(0);
         }
 
-        const canvas = document.getElementById('sky-canvas');
-        const ctx = canvas.getContext('2d');
+        const canvasEl = document.getElementById('sky-canvas');
+        const ctx = canvasEl.getContext('2d');
+        // Tamaño lógico (px CSS) usado por toda la escena; el buffer real se escala por DPR
+        let viewW = 0;
+        let viewH = 0;
+        let pixelRatio = 1;
+        const canvas = {
+            get width() { return viewW; },
+            get height() { return viewH; }
+        };
         let stars = [];
         let constellations = [];
         let fireflies = [];
@@ -2361,8 +2655,14 @@ const JACK_MUSIC_START_SECONDS = 0;
         let shootingStar = null;
 
         function resizeCanvas() {
-            canvas.width = canvas.parentElement.clientWidth;
-            canvas.height = canvas.parentElement.clientHeight;
+            viewW = canvasEl.parentElement.clientWidth;
+            viewH = canvasEl.parentElement.clientHeight;
+
+            // Nitidez en pantallas de alta densidad, con tope para no saturar la GPU
+            pixelRatio = Math.min(window.devicePixelRatio || 1, isCompactViewport() ? 2 : 2.5);
+            canvasEl.width = Math.max(1, Math.round(viewW * pixelRatio));
+            canvasEl.height = Math.max(1, Math.round(viewH * pixelRatio));
+            ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
 
             // La escena completa siempre visible (meet): en vertical se ajusta al ancho
             const svg = document.getElementById('stage-svg');
@@ -2374,12 +2674,19 @@ const JACK_MUSIC_START_SECONDS = 0;
             initAtmosphere();
         }
 
+        // Menos partículas en pantallas pequeñas para mantener fluidez en móvil
+        function isCompactViewport() {
+            return window.innerWidth < 768;
+        }
+
         function initAtmosphere() {
             stars = [];
             constellations = [];
             fireflies = [];
 
-            const numStars = Math.max(210, Math.floor((canvas.width * canvas.height) / 4200));
+            const numStars = isCompactViewport()
+                ? 120
+                : Math.max(210, Math.floor((canvas.width * canvas.height) / 4200));
             for (let i = 0; i < numStars; i++) {
                 const roll = Math.random();
                 let tier = 'micro';
@@ -2457,7 +2764,7 @@ const JACK_MUSIC_START_SECONDS = 0;
                 }
             }
 
-            for (let i = 0; i < 28; i++) {
+            for (let i = 0; i < (isCompactViewport() ? 14 : 28); i++) {
                 fireflies.push({
                     x: Math.random() * canvas.width,
                     y: canvas.height * (0.32 + Math.random() * 0.58),
@@ -2481,6 +2788,73 @@ const JACK_MUSIC_START_SECONDS = 0;
             ringMoonbeam.style.height = Math.max(0, cy) + 'px';
             ringMoonbeamGlow.style.left = (cx - 110) + 'px';
             ringMoonbeamGlow.style.top = (cy - 110) + 'px';
+        }
+
+        // Chispas doradas alrededor del anillo: aumentan con cada acto y se disparan en el clímax
+        let ringSparks = [];
+        let ringCenterCache = null;
+        let ringCenterStamp = -1000;
+
+        function getRingCanvasCenter(now) {
+            if (!ringCenterCache || now - ringCenterStamp > 250) {
+                ringCenterStamp = now;
+                const ringBox = document.getElementById('ring-box-group');
+                const rect = canvasEl.getBoundingClientRect();
+                if (!ringBox || rect.width === 0) {
+                    ringCenterCache = null;
+                    return null;
+                }
+                const r = ringBox.getBoundingClientRect();
+                ringCenterCache = {
+                    x: r.left + r.width / 2 - rect.left,
+                    y: r.top + r.height / 2 - rect.top,
+                    radius: Math.max(r.width, r.height) / 2
+                };
+            }
+            return ringCenterCache;
+        }
+
+        function updateRingSparks(now) {
+            const spawnRates = [0, 0.04, 0.1, 0.22];
+            const center = getRingCanvasCenter(now);
+            const climaxBoost = now < climaxBeamUntil ? 3 : 1;
+            const rate = (spawnRates[currentAct] || 0) * Math.min(1, rigCurrent.ringScale) * climaxBoost;
+
+            if (center && center.radius > 4 && Math.random() < rate && ringSparks.length < 140) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = 0.4 + Math.random() * 1.2;
+                ringSparks.push({
+                    x: center.x + Math.cos(angle) * center.radius * 0.6,
+                    y: center.y + Math.sin(angle) * center.radius * 0.6,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed - 0.6,
+                    life: 0,
+                    maxLife: 50 + Math.random() * 40,
+                    size: 1 + Math.random() * 1.6
+                });
+            }
+
+            for (let i = ringSparks.length - 1; i >= 0; i--) {
+                const s = ringSparks[i];
+                s.life++;
+                s.x += s.vx;
+                s.y += s.vy;
+                s.vy += 0.012;
+                const t = s.life / s.maxLife;
+                if (t >= 1) {
+                    ringSparks.splice(i, 1);
+                    continue;
+                }
+                ctx.save();
+                ctx.globalAlpha = Math.sin(t * Math.PI);
+                ctx.fillStyle = '#fef08a';
+                ctx.shadowColor = '#fde047';
+                ctx.shadowBlur = 6;
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
         }
 
         function spawnRosePetal3D(scatter) {
@@ -2865,6 +3239,8 @@ const JACK_MUSIC_START_SECONDS = 0;
                 ctx.restore();
             }
 
+            updateRingSparks(nowMs);
+
             requestAnimationFrame(masterAnimationLoop);
         }
 
@@ -2876,9 +3252,18 @@ const JACK_MUSIC_START_SECONDS = 0;
 
         window.addEventListener('resize', resizeCanvas);
 
+        function hideBootScreen() {
+            const boot = document.getElementById('boot-screen');
+            if (boot) boot.classList.add('is-done');
+        }
+
+        // Respaldo: oculta la carga aunque algún recurso externo tarde o falle
+        setTimeout(hideBootScreen, 4500);
+
         window.onload = function () {
             resizeCanvas();
             requestAnimationFrame(masterAnimationLoop);
+            hideBootScreen();
         };
     </script>
 </body>
