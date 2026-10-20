@@ -652,6 +652,11 @@
             pointer-events: none !important;
         }
 
+        /* Los hijos con pointer-events propios ignoran el contenedor oculto; sin esto bloquean el botón de inicio */
+        #minimal-stage-hud.opacity-0 * {
+            pointer-events: none !important;
+        }
+
         @media (max-width: 768px) {
             body {
                 overscroll-behavior-y: none;
