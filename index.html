@@ -349,22 +349,29 @@
             #stage-wrapper {
                 height: calc(100dvh - 54px) !important;
                 min-height: 0 !important;
+                background:
+                    radial-gradient(circle at 50% 14%, rgba(250, 204, 21, 0.08), transparent 24%),
+                    radial-gradient(circle at 50% 68%, rgba(147, 51, 234, 0.08), transparent 32%),
+                    #040208;
             }
 
             #stage-svg {
                 width: 100% !important;
                 height: 100% !important;
+                transform: scale(1.06);
+                transform-origin: center center;
             }
 
             #minimal-stage-hud {
-                bottom: calc(1.25rem + env(safe-area-inset-bottom, 16px)) !important;
-                padding-bottom: 0.25rem;
+                bottom: calc(1.15rem + env(safe-area-inset-bottom, 16px)) !important;
+                padding-bottom: 0.15rem;
                 width: 100%;
             }
 
             #proposal-cta-wrapper {
-                margin-bottom: 0.35rem !important;
-                transform: scale(0.96);
+                margin-bottom: 0.3rem !important;
+                transform: translateY(-2px) scale(0.97);
+                transform-origin: center bottom;
             }
 
             .intertitle-backdrop > div {
@@ -377,13 +384,17 @@
 
         @media (max-width: 480px) {
             #minimal-stage-hud {
-                bottom: calc(1.6rem + env(safe-area-inset-bottom, 20px)) !important;
+                bottom: calc(1.45rem + env(safe-area-inset-bottom, 20px)) !important;
             }
 
             #proposal-cta-wrapper button {
                 padding: 0.55rem 1.15rem !important;
                 font-size: 0.82rem !important;
                 white-space: nowrap;
+            }
+
+            #stage-svg {
+                transform: scale(1.12);
             }
         }
 
@@ -2061,7 +2072,7 @@ const JACK_MUSIC_START_SECONDS = 0;
             if (svg) {
                 const isPortraitMobile = window.innerWidth < 768 && window.innerHeight > window.innerWidth;
                 if (isPortraitMobile) {
-                    svg.setAttribute('viewBox', '230 40 740 680');
+                    svg.setAttribute('viewBox', '210 30 780 660');
                     svg.setAttribute('preserveAspectRatio', 'xMidYMid slice');
                 } else {
                     svg.setAttribute('viewBox', '0 0 1200 720');
