@@ -4,6 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Sinfonía Bajo la Luna en Espiral - Teatro Gótico Interactivo</title>
+    <meta name="description" content="Obra gótica interactiva inspirada en la niebla, el misterio y la magia de la luna. Un teatro oscuro en cuatro actos.">
+    <meta name="theme-color" content="#06030d">
+    <link rel="canonical" href="https://nahuelzaiser.github.io/teatro-gotico-luna/">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f030b'/%3E%3Cpath d='M32 16A16 16 0 1 0 32 48A13 13 0 0 0 32 16Z' fill='%23fef08a'/%3E%3C/svg%3E">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Teatro del Mundo Invertido">
+    <meta property="og:title" content="Sinfonía Bajo la Luna en Espiral">
+    <meta property="og:description" content="Obra gótica interactiva inspirada en la niebla, el misterio y la magia de la luna. Un teatro oscuro en cuatro actos.">
+    <meta property="og:url" content="https://nahuelzaiser.github.io/teatro-gotico-luna/">
+    <meta property="og:locale" content="es_ES">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Sinfonía Bajo la Luna en Espiral">
+    <meta name="twitter:description" content="Obra gótica interactiva inspirada en la niebla, el misterio y la magia de la luna.">
     <!-- Tailwind CSS compilado en local (regenerar con: npm run build:css) -->
     <link rel="stylesheet" href="tailwind.css">
     <!-- Google Fonts: Tipografías Góticas, Teatrales y Poéticas -->
@@ -505,9 +518,88 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                animation-delay: 0s !important;
+                scroll-behavior: auto !important;
+            }
+            *:not(#intertitle-progress), *:not(#intertitle-progress)::before, *:not(#intertitle-progress)::after {
+                transition-duration: 0.01ms !important;
+            }
             .ink-letter { animation: none; opacity: 1; filter: none; transform: none; }
             .act-frame .act-frame-outer { animation: none; }
             .is-typing::after { animation: none; }
+        }
+
+        /* Estados de foco visibles y área táctil mínima de 44 px */
+        :is(button, a, input, [tabindex]):focus-visible {
+            outline: 2px solid #fde68a;
+            outline-offset: 3px;
+            box-shadow: 0 0 0 5px rgba(250, 204, 21, 0.25);
+        }
+        button { position: relative; }
+        button::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: max(100%, 44px);
+            height: max(100%, 44px);
+            transform: translate(-50%, -50%);
+        }
+
+        /* Cursor personalizado con halo de luna (solo ratón / puntero fino) */
+        @media (hover: hover) and (pointer: fine) {
+            html, body, *, *::before, *::after {
+                cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cdefs%3E%3CradialGradient id='h' cx='50%25' cy='50%25' r='50%25'%3E%3Cstop offset='0.35' stop-color='%23fef08a' stop-opacity='0.55'/%3E%3Cstop offset='1' stop-color='%23facc15' stop-opacity='0'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='16' cy='16' r='16' fill='url(%23h)'/%3E%3Cpath d='M16 8A8 8 0 1 0 16 24A6.5 6.5 0 0 0 16 8Z' fill='%23fefce8'/%3E%3C/svg%3E") 16 16, auto;
+            }
+        }
+
+        /* Control de volumen de la música */
+        a, button, label, [role="button"], .volume-control input[type="range"] { cursor: pointer; }
+        .volume-control input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 5.5rem;
+            height: 44px;
+            margin: 0;
+            background: transparent;
+            cursor: pointer;
+        }
+        .volume-control input[type="range"]::-webkit-slider-runnable-track {
+            height: 4px;
+            border-radius: 9999px;
+            background: linear-gradient(to right, #facc15 var(--vol, 85%), rgba(120, 53, 15, 0.7) var(--vol, 85%));
+        }
+        .volume-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            margin-top: -6px;
+            border: none;
+            border-radius: 50%;
+            background: #fef08a;
+            box-shadow: 0 0 10px rgba(250, 204, 21, 0.8);
+        }
+        .volume-control input[type="range"]::-moz-range-track {
+            height: 4px;
+            border-radius: 9999px;
+            background: rgba(120, 53, 15, 0.7);
+        }
+        .volume-control input[type="range"]::-moz-range-progress {
+            height: 4px;
+            border-radius: 9999px;
+            background: #facc15;
+        }
+        .volume-control input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border: none;
+            border-radius: 50%;
+            background: #fef08a;
+            box-shadow: 0 0 10px rgba(250, 204, 21, 0.8);
         }
 
         .intertitle-hidden {
@@ -930,6 +1022,12 @@
                 <i id="icon-audio" class="ph-fill ph-speaker-high text-sm sm:text-base text-yellow-300"></i>
                 <span id="text-audio">Música</span>
             </button>
+
+            <div id="volume-control" class="volume-control flex items-center gap-1.5 pl-2 pr-2.5 rounded-full border border-yellow-500/40 bg-amber-950/50">
+                <i class="ph ph-speaker-low text-sm text-yellow-300/80 shrink-0" aria-hidden="true"></i>
+                <input id="volume-slider" type="range" min="0" max="100" step="1" value="85" aria-label="Volumen de la música" style="--vol: 85%" oninput="setMusicVolume(this.value)">
+                <span id="volume-value" class="hidden sm:inline w-9 text-[11px] text-yellow-200 tabular-nums text-right">85%</span>
+            </div>
         </div>
     </header>
 
@@ -1662,6 +1760,9 @@
         let proposalButtonTimer = null;
         let glitchTimer = null;
         let actTransitionLock = false;
+        // Movimiento reducido: el sistema operativo pide menos animación; se congela el movimiento ambiental
+        const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const MOTION_SCALE = REDUCED_MOTION ? 0 : 1;
         const INTERTITLE_READ_MS = 14000;
         const SCENE_VIEW_MS = 7000;
         const PROPOSAL_BUTTON_DELAY_MS = 4000;
@@ -1684,9 +1785,9 @@ const JACK_MUSIC_START_SECONDS = 0;
             notes.forEach((freq, index) => {
                 setTimeout(() => {
                     if (isMuted) return;
-                    playCelestaNote(freq, index % 2 === 0 ? 0.9 : 1.1, 0.065);
+                    playCelestaNote(freq, index % 2 === 0 ? 0.9 : 1.1, 0.065 * musicGainScale());
                     if (index % 3 === 1) {
-                        playWarmStringPad(freq / 2, 1.4, 0.02);
+                        playWarmStringPad(freq / 2, 1.4, 0.02 * musicGainScale());
                     }
                 }, index * 190);
             });
@@ -1696,7 +1797,7 @@ const JACK_MUSIC_START_SECONDS = 0;
             if (jackAudio) return;
             jackAudio = new Audio(JACK_MUSIC_FILE);
             jackAudio.preload = 'auto';
-            jackAudio.volume = 0.87;
+            syncMusicVolume();
             jackAudio.loop = false;
             jackAudio.addEventListener('error', () => {
                 playJackFallbackTheme();
@@ -1902,6 +2003,7 @@ const JACK_MUSIC_START_SECONDS = 0;
 
         function updateRigKinematics(time) {
             const lerpSpeed = 0.045;
+            if (REDUCED_MOTION) time = 0;
 
             for (const key in activeRigTarget) {
                 rigCurrent[key] += (activeRigTarget[key] - rigCurrent[key]) * lerpSpeed;
@@ -2025,6 +2127,7 @@ const JACK_MUSIC_START_SECONDS = 0;
 
         // iOS exige permiso explícito desde un gesto del usuario; en Android basta con escuchar
         function enableGyroParallax() {
+            if (REDUCED_MOTION) return;
             if (gyroRequested || !('DeviceOrientationEvent' in window)) return;
             if (!window.matchMedia('(pointer: coarse)').matches) return;
             gyroRequested = true;
@@ -2045,8 +2148,10 @@ const JACK_MUSIC_START_SECONDS = 0;
         }
 
         function updateParallax() {
-            currentParallaxX += (mouseX - currentParallaxX) * 0.05;
-            currentParallaxY += (mouseY - currentParallaxY) * 0.05;
+            const targetX = REDUCED_MOTION ? 0 : mouseX;
+            const targetY = REDUCED_MOTION ? 0 : mouseY;
+            currentParallaxX += (targetX - currentParallaxX) * 0.05;
+            currentParallaxY += (targetY - currentParallaxY) * 0.05;
 
             const skyGroup = document.getElementById('parallax-sky');
             const midGroup = document.getElementById('parallax-midground');
@@ -2076,6 +2181,7 @@ const JACK_MUSIC_START_SECONDS = 0;
             playCurtainSound();
             startMusicBoxLoop();
             startJackSong(JACK_MUSIC_START_SECONDS);
+            rampMusicFade(1, 3000);
 
             const plaque = document.getElementById('start-plaque');
             const curtainLeft = document.getElementById('curtain-left');
@@ -2161,6 +2267,11 @@ const JACK_MUSIC_START_SECONDS = 0;
         function typeWriterText(el, text, speedMs) {
             if (!el) return;
             clearInterval(typeWriterTimer);
+            if (REDUCED_MOTION) {
+                el.textContent = text;
+                el.classList.remove('is-typing');
+                return;
+            }
             const chars = [...text];
             let count = 0;
             el.textContent = '';
@@ -2233,6 +2344,8 @@ const JACK_MUSIC_START_SECONDS = 0;
             }
 
             triggerSceneGlitch();
+            playActChangeSound();
+            hapticPulse(18);
             showIntertitleCard(INTERTITLE_READ_MS);
         }
 
@@ -2400,6 +2513,92 @@ const JACK_MUSIC_START_SECONDS = 0;
         let musicInterval = null;
         let noteStep = 0;
 
+        // Volumen de música elegido por la usuaria (0-1) y entrada suave (fade-in) al empezar el espectáculo
+        const MUSIC_DEFAULT_VOLUME = 0.85;
+        let musicVolume = MUSIC_DEFAULT_VOLUME;
+        let musicFade = 0;
+        let musicFadeTimer = null;
+
+        // Escala relativa de los efectos (curtain, campanas) según el control de volumen
+        function volumeScale() {
+            return Math.max(0.0001, musicVolume / MUSIC_DEFAULT_VOLUME);
+        }
+
+        // Escala de la música de caja: volumen elegido multiplicado por el fade-in
+        function musicGainScale() {
+            return Math.max(0.0001, volumeScale() * musicFade);
+        }
+
+        function syncMusicVolume() {
+            if (jackAudio) {
+                jackAudio.volume = Math.min(1, Math.max(0, musicVolume * musicFade));
+            }
+        }
+
+        function rampMusicFade(target, durationMs) {
+            clearInterval(musicFadeTimer);
+            const start = musicFade;
+            const steps = Math.max(1, Math.round(durationMs / 50));
+            let step = 0;
+            musicFadeTimer = setInterval(() => {
+                step++;
+                musicFade = start + (target - start) * Math.min(1, step / steps);
+                syncMusicVolume();
+                if (step >= steps) {
+                    clearInterval(musicFadeTimer);
+                    musicFadeTimer = null;
+                }
+            }, 50);
+        }
+
+        function updateAudioControls() {
+            const icon = document.getElementById('icon-audio');
+            const btn = document.getElementById('btn-audio');
+            const silent = isMuted || musicVolume <= 0;
+
+            if (icon) {
+                icon.className = silent
+                    ? "ph ph-speaker-slash text-sm sm:text-base text-rose-400"
+                    : "ph-fill ph-speaker-high text-sm sm:text-base text-yellow-300";
+            }
+            if (btn) {
+                btn.classList.toggle('border-rose-500/40', silent);
+                btn.classList.toggle('border-yellow-500/40', !silent);
+            }
+        }
+
+        function setMusicVolume(percent) {
+            musicVolume = Math.min(1, Math.max(0, Number(percent) / 100));
+            const pct = Math.round(musicVolume * 100);
+            const slider = document.getElementById('volume-slider');
+            const label = document.getElementById('volume-value');
+            if (slider) {
+                slider.value = pct;
+                slider.style.setProperty('--vol', pct + '%');
+                slider.setAttribute('aria-valuetext', pct + ' %');
+            }
+            if (label) label.textContent = pct + '%';
+
+            syncMusicVolume();
+            if (musicVolume > 0 && isMuted) toggleAudio();
+            updateAudioControls();
+        }
+
+        // Vibración corta solo en móviles táctiles que la soporten
+        function hapticPulse(ms = 12) {
+            if (typeof navigator.vibrate !== 'function') return;
+            if (!window.matchMedia('(pointer: coarse)').matches) return;
+            try { navigator.vibrate(ms); } catch (error) {}
+        }
+
+        // Campanilla suave al cambiar de acto
+        function playActChangeSound() {
+            if (!audioCtx || isMuted) return;
+            const scale = Math.max(0.0001, volumeScale());
+            playCelestaNote(659.25, 1.6, 0.03 * scale);
+            setTimeout(() => playCelestaNote(880.00, 2.0, 0.022 * scale), 140);
+        }
+
         const waltzSequence = [
             { mel: 440.00, bass: 220.00, pad: 261.63 },
             { mel: 523.25, bass: 329.63, pad: 0 },
@@ -2502,9 +2701,9 @@ const JACK_MUSIC_START_SECONDS = 0;
             musicInterval = setInterval(() => {
                 if (isMuted) return;
                 const step = waltzSequence[noteStep % waltzSequence.length];
-                if (step.mel > 0) playCelestaNote(step.mel, 1.5, 0.0175);
-                if (step.bass > 0) playCelestaNote(step.bass, 1.2, 0.008);
-                if (step.pad > 0) playWarmStringPad(step.pad, 1.3, 0.00625);
+                if (step.mel > 0) playCelestaNote(step.mel, 1.5, 0.0175 * musicGainScale());
+                if (step.bass > 0) playCelestaNote(step.bass, 1.2, 0.008 * musicGainScale());
+                if (step.pad > 0) playWarmStringPad(step.pad, 1.3, 0.00625 * musicGainScale());
                 noteStep++;
             }, 450);
         }
@@ -2513,7 +2712,7 @@ const JACK_MUSIC_START_SECONDS = 0;
             if (!audioCtx || isMuted) return;
             const arp = [220, 261.63, 329.63, 440, 523.25, 659.25];
             arp.forEach((f, idx) => {
-                setTimeout(() => playCelestaNote(f, 1.8, 0.055), idx * 105);
+                setTimeout(() => playCelestaNote(f, 1.8, 0.055 * volumeScale()), idx * 105);
             });
         }
 
@@ -2521,7 +2720,7 @@ const JACK_MUSIC_START_SECONDS = 0;
             if (!audioCtx || isMuted) return;
             const sparkleNotes = [1046.50, 1318.51, 1567.98, 2093.00, 2637.02];
             sparkleNotes.forEach((f, idx) => {
-                setTimeout(() => playCelestaNote(f, 1.7, 0.065), idx * 90);
+                setTimeout(() => playCelestaNote(f, 1.7, 0.065 * volumeScale()), idx * 90);
             });
         }
 
@@ -2529,15 +2728,13 @@ const JACK_MUSIC_START_SECONDS = 0;
             if (!audioCtx || isMuted) return;
             const chord = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
             chord.forEach((f, idx) => {
-                setTimeout(() => playCelestaNote(f, 2.6, 0.075), idx * 75);
+                setTimeout(() => playCelestaNote(f, 2.6, 0.075 * volumeScale()), idx * 75);
             });
         }
 
         function toggleAudio() {
             initAudio();
             isMuted = !isMuted;
-            const icon = document.getElementById('icon-audio');
-            const btn = document.getElementById('btn-audio');
 
             if (jackAudio) {
                 jackAudio.muted = isMuted;
@@ -2553,12 +2750,9 @@ const JACK_MUSIC_START_SECONDS = 0;
                 }
             }
 
-            if (isMuted) {
-                icon.className = "ph ph-speaker-slash text-base text-rose-400";
-                btn.classList.replace('border-yellow-500/40', 'border-rose-500/40');
-            } else {
-                icon.className = "ph-fill ph-speaker-high text-base text-yellow-300";
-                btn.classList.replace('border-rose-500/40', 'border-yellow-500/40');
+            updateAudioControls();
+
+            if (!isMuted) {
                 if (showStarted && !musicInterval) startMusicBoxLoop();
                 if (showStarted && (!jackAudio || jackAudio.paused)) startJackSong(JACK_MUSIC_START_SECONDS);
             }
@@ -2818,7 +3012,7 @@ const JACK_MUSIC_START_SECONDS = 0;
             const spawnRates = [0, 0.04, 0.1, 0.22];
             const center = getRingCanvasCenter(now);
             const climaxBoost = now < climaxBeamUntil ? 3 : 1;
-            const rate = (spawnRates[currentAct] || 0) * Math.min(1, rigCurrent.ringScale) * climaxBoost;
+            const rate = REDUCED_MOTION ? 0 : (spawnRates[currentAct] || 0) * Math.min(1, rigCurrent.ringScale) * climaxBoost;
 
             if (center && center.radius > 4 && Math.random() < rate && ringSparks.length < 140) {
                 const angle = Math.random() * Math.PI * 2;
@@ -2920,6 +3114,7 @@ const JACK_MUSIC_START_SECONDS = 0;
         }
 
         function startClimaxFinale() {
+            if (REDUCED_MOTION) { playRingSparkleSound(); return; }
             const w = canvas.width;
             const h = canvas.height;
             const now = performance.now();
@@ -2944,6 +3139,7 @@ const JACK_MUSIC_START_SECONDS = 0;
         }
 
         function triggerFireworkBurst() {
+            if (REDUCED_MOTION) return;
             const colors = ['#fef08a', '#f43f5e', '#c084fc', '#38bdf8', '#fde047'];
             for (let b = 0; b < 4; b++) {
                 setTimeout(() => {
@@ -2997,7 +3193,7 @@ const JACK_MUSIC_START_SECONDS = 0;
             updateParallax();
 
             stars.forEach(s => {
-                s.phase += s.speed;
+                s.phase += s.speed * MOTION_SCALE;
                 const twinkle = (Math.sin(s.phase) + 1) * 0.5;
 
                 ctx.save();
@@ -3062,7 +3258,7 @@ const JACK_MUSIC_START_SECONDS = 0;
                 ctx.restore();
             });
 
-            if (!shootingStar && Math.random() < 0.003) {
+            if (!shootingStar && MOTION_SCALE > 0 && Math.random() < 0.003) {
                 shootingStar = {
                     x: canvas.width * (0.15 + Math.random() * 0.55),
                     y: canvas.height * (0.05 + Math.random() * 0.25),
@@ -3097,9 +3293,9 @@ const JACK_MUSIC_START_SECONDS = 0;
             }
 
             fireflies.forEach(ff => {
-                ff.x += ff.vx;
-                ff.y += ff.vy;
-                ff.phase += 0.04;
+                ff.x += ff.vx * MOTION_SCALE;
+                ff.y += ff.vy * MOTION_SCALE;
+                ff.phase += 0.04 * MOTION_SCALE;
                 if (ff.x < 0) ff.x = canvas.width;
                 if (ff.x > canvas.width) ff.x = 0;
                 if (ff.y < canvas.height * 0.3) ff.vy = Math.abs(ff.vy);
