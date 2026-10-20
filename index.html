@@ -3041,7 +3041,7 @@ const JACK_MUSIC_START_SECONDS = 0;
 
             const numStars = isCompactViewport()
                 ? 120
-                : Math.max(210, Math.floor((canvas.width * canvas.height) / 4200));
+                : Math.max(630, Math.floor((canvas.width * canvas.height) / 1400));
             for (let i = 0; i < numStars; i++) {
                 const roll = Math.random();
                 let tier = 'micro';
@@ -3351,19 +3351,20 @@ const JACK_MUSIC_START_SECONDS = 0;
             updateRigKinematics(timestamp || 0);
             updateParallax();
 
+            const starBoost = isCompactViewport() ? 1 : 1.35;
             stars.forEach(s => {
                 s.phase += s.speed;
                 const twinkle = (Math.sin(s.phase) + 1) * 0.5;
 
                 ctx.save();
                 if (s.tier === 'micro') {
-                    ctx.globalAlpha = 0.35 + twinkle * 0.65;
+                    ctx.globalAlpha = Math.min(1, (0.35 + twinkle * 0.65) * starBoost);
                     ctx.fillStyle = s.hue;
                     ctx.beginPath();
                     ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
                     ctx.fill();
                 } else if (s.tier === 'medium') {
-                    const alpha = 0.3 + twinkle * 0.7;
+                    const alpha = Math.min(1, (0.3 + twinkle * 0.7) * starBoost);
                     ctx.globalAlpha = alpha;
                     ctx.fillStyle = s.hue;
                     ctx.shadowColor = s.hue;
@@ -3384,12 +3385,12 @@ const JACK_MUSIC_START_SECONDS = 0;
                         ctx.stroke();
                     }
                 } else {
-                    const alpha = 0.45 + twinkle * 0.55;
+                    const alpha = Math.min(1, (0.45 + twinkle * 0.55) * starBoost);
                     const armLength = s.r * (4.2 + twinkle * 4.0);
                     ctx.globalAlpha = alpha;
                     ctx.fillStyle = '#ffffff';
                     ctx.shadowColor = s.hue;
-                    ctx.shadowBlur = 12;
+                    ctx.shadowBlur = 12 * starBoost;
 
                     ctx.beginPath();
                     ctx.arc(s.x, s.y, s.r * (0.85 + twinkle * 0.25), 0, Math.PI * 2);
