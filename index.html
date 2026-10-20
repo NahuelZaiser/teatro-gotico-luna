@@ -618,6 +618,61 @@
             to { opacity: 1; filter: blur(0); transform: none; }
         }
 
+        /* Escritura mágica del mensaje final */
+        .magic-write {
+            position: relative;
+        }
+        .magic-word {
+            white-space: nowrap;
+        }
+        .magic-char {
+            display: inline-block;
+            opacity: 0;
+        }
+        .magic-char.is-on {
+            animation: magicInk 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+        }
+        @keyframes magicInk {
+            0% { opacity: 0; color: #fffbeb; filter: blur(7px) brightness(2.2); transform: translateY(0.3em) scale(1.3); text-shadow: 0 0 14px #fef08a, 0 0 26px rgba(250, 204, 21, 0.85); }
+            55% { opacity: 1; color: #fde68a; filter: blur(0) brightness(1.35); transform: translateY(0) scale(1.04); text-shadow: 0 0 8px rgba(250, 204, 21, 0.7); }
+            100% { opacity: 1; color: #fce7f3; filter: none; transform: none; text-shadow: 0 0 0 rgba(250, 204, 21, 0); }
+        }
+        .magic-quill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            background: radial-gradient(circle, #ffffff 0%, #fef08a 35%, rgba(250, 204, 21, 0) 70%);
+            box-shadow: 0 0 10px 3px rgba(254, 240, 138, 0.75);
+            transition: transform 0.14s linear, opacity 0.9s ease;
+        }
+        .magic-quill.is-active { opacity: 1; }
+        .magic-quill.is-done { opacity: 0; }
+        .magic-spark {
+            position: absolute;
+            z-index: 2;
+            pointer-events: none;
+            color: #fef9c3;
+            font-size: 0.8rem;
+            line-height: 1;
+            text-shadow: 0 0 6px #fde047, 0 0 12px rgba(250, 204, 21, 0.9);
+            animation: magicSpark 0.85s ease-out forwards;
+        }
+        @keyframes magicSpark {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.4) rotate(0deg); }
+            30% { opacity: 1; transform: translate(calc(-50% + var(--dx) * 0.5), calc(-50% + var(--dy) * 0.5)) scale(1.1) rotate(60deg); }
+            100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.2) rotate(160deg); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .magic-char { opacity: 1; }
+            .magic-char.is-on { animation: none; }
+            .magic-quill, .magic-spark { display: none; }
+        }
+
         /* Cursor de escritura para el mensaje final */
         .is-typing::after {
             content: '\258D';
@@ -2390,22 +2445,64 @@ const JACK_MUSIC_START_SECONDS = 0;
             });
         }
 
-        // Escritura progresiva de un texto (mensaje final)
+        // Escritura mágica del mensaje final: letras con brillo, chispas y una pluma luminosa
         let typeWriterTimer = null;
         function typeWriterText(el, text, speedMs) {
             if (!el) return;
             clearInterval(typeWriterTimer);
-            const chars = [...text];
-            let count = 0;
+            el.setAttribute('aria-label', text);
             el.textContent = '';
-            el.classList.add('is-typing');
-            typeWriterTimer = setInterval(() => {
-                count++;
-                el.textContent = chars.slice(0, count).join('');
-                if (count >= chars.length) {
-                    clearInterval(typeWriterTimer);
-                    el.classList.remove('is-typing');
+            el.classList.add('magic-write');
+
+            const quill = document.createElement('span');
+            quill.className = 'magic-quill';
+            el.appendChild(quill);
+
+            const letters = [];
+            text.split(/(\s+)/).filter(Boolean).forEach(part => {
+                if (/^\s+$/.test(part)) {
+                    el.insertBefore(document.createTextNode(' '), quill);
+                    return;
                 }
+                const word = document.createElement('span');
+                word.className = 'magic-word';
+                [...part].forEach(ch => {
+                    const span = document.createElement('span');
+                    span.className = 'magic-char';
+                    span.textContent = ch;
+                    word.appendChild(span);
+                    letters.push(span);
+                });
+                el.insertBefore(word, quill);
+            });
+
+            const moveQuill = span => {
+                quill.classList.add('is-active');
+                quill.style.transform = `translate(${span.offsetLeft + span.offsetWidth - 2}px, ${span.offsetTop + span.offsetHeight / 2 - 6}px)`;
+            };
+            const spawnSpark = span => {
+                const spark = document.createElement('span');
+                spark.className = 'magic-spark';
+                spark.textContent = '✦';
+                spark.style.left = `${span.offsetLeft + span.offsetWidth / 2}px`;
+                spark.style.top = `${span.offsetTop + span.offsetHeight / 2}px`;
+                spark.style.setProperty('--dx', `${(Math.random() * 36 - 18).toFixed(1)}px`);
+                spark.style.setProperty('--dy', `${(-Math.random() * 26 - 6).toFixed(1)}px`);
+                el.appendChild(spark);
+                setTimeout(() => spark.remove(), 900);
+            };
+
+            let index = 0;
+            typeWriterTimer = setInterval(() => {
+                if (index >= letters.length) {
+                    clearInterval(typeWriterTimer);
+                    quill.classList.add('is-done');
+                    return;
+                }
+                const span = letters[index++];
+                span.classList.add('is-on');
+                moveQuill(span);
+                if (index % 3 === 0 || /[.,!?💖]/.test(span.textContent)) spawnSpark(span);
             }, speedMs);
         }
 
