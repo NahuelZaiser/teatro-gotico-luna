@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Sinfonía Bajo la Luna en Espiral - Teatro Gótico Interactivo</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -335,88 +335,55 @@
 
         @media (max-width: 768px) {
             body {
-                overscroll-behavior-y: contain;
+                overscroll-behavior-y: none;
+                height: 100dvh !important;
+                max-height: 100dvh !important;
             }
 
             header {
-                padding-left: 0.75rem !important;
-                padding-right: 0.75rem !important;
+                padding: 0.45rem 0.65rem !important;
+                flex-wrap: wrap;
+                gap: 0.35rem;
             }
 
-            header h1 {
-                letter-spacing: 0.08em;
+            #stage-wrapper {
+                height: calc(100dvh - 54px) !important;
+                min-height: 0 !important;
+            }
+
+            #stage-svg {
+                width: 100% !important;
+                height: 100% !important;
+            }
+
+            #minimal-stage-hud {
+                bottom: calc(1.25rem + env(safe-area-inset-bottom, 16px)) !important;
+                padding-bottom: 0.25rem;
+                width: 100%;
+            }
+
+            #proposal-cta-wrapper {
+                margin-bottom: 0.35rem !important;
+                transform: scale(0.96);
             }
 
             .intertitle-backdrop > div {
-                padding: 1.15rem 0.9rem 1.35rem !important;
+                padding: 1.15rem 1rem 1.35rem !important;
                 width: min(92vw, 34rem) !important;
-                max-height: min(82vh, 540px);
+                max-height: min(80dvh, 520px);
                 border-radius: 1.4rem !important;
-            }
-
-            .intertitle-backdrop p,
-            .intertitle-backdrop h2 {
-                word-break: break-word;
-            }
-
-            #act-title {
-                margin-bottom: 0.85rem;
-            }
-
-            #act-text {
-                margin-bottom: 1.3rem;
-                padding-left: 0.2rem !important;
-                padding-right: 0.2rem !important;
             }
         }
 
         @media (max-width: 480px) {
-            header {
-                gap: 0.45rem;
-            }
-
-            header .text-xs,
-            header .text-sm,
-            header .text-base,
-            header .text-lg {
-                font-size: 0.7rem !important;
-            }
-
-            #stage-wrapper {
-                min-height: calc(100dvh - 58px);
-            }
-
             #minimal-stage-hud {
-                bottom: 0.5rem !important;
+                bottom: calc(1.6rem + env(safe-area-inset-bottom, 20px)) !important;
             }
 
-            #minimal-stage-hud .pointer-events-auto {
-                max-width: 94vw;
-            }
-
-            .intertitle-backdrop > div {
-                width: min(95vw, 28rem) !important;
-                border-radius: 1.45rem !important;
-            }
-
-            #act-badge {
-                letter-spacing: 0.18em !important;
-                font-size: 0.62rem !important;
-            }
-
-            #act-title {
-                font-size: clamp(1.2rem, 5.5vw, 2rem);
-                line-height: 1.18;
-            }
-
-            #act-text {
-                font-size: clamp(0.92rem, 4vw, 1.28rem);
-                line-height: 1.56;
-            }
-
-            #intertitle-overlay .btn-accept {
-                width: 100%;
-                justify-content: center;
+            #proposal-cta-wrapper button {
+                padding: 0.55rem 1.15rem !important;
+                font-size: 0.82rem !important;
+                white-space: nowrap;
             }
         }
 
@@ -523,40 +490,39 @@
         }
     </style>
 </head>
-<body class="h-screen w-screen flex flex-col justify-between relative select-none">
+<body class="h-[100dvh] w-full flex flex-col justify-between relative select-none overflow-hidden">
     <div class="scene-noise"></div>
     <div class="glitch-layer"></div>
 
     <!-- ==========================================
          BARRA SUPERIOR DE CONTROLES DEL TEATRO
     =========================================== -->
-    <header class="w-full z-[45] px-4 py-2 flex items-center justify-between bg-[#06030d]/90 border-b border-yellow-600/35 backdrop-blur-md">
-        <div class="flex items-center gap-3">
-            <span class="text-yellow-300 text-2xl animate-pulse"><i class="ph-fill ph-moon-stars"></i></span>
-            <div>
-                <h1 class="font-gothic-title text-sm sm:text-base md:text-lg text-transparent bg-gradient-to-r from-yellow-200 via-purple-200 to-cyan-200 bg-clip-text tracking-wider leading-none">
+    <header class="w-full z-[45] px-3 sm:px-4 py-2 flex items-center justify-between bg-[#06030d]/95 border-b border-yellow-600/35 backdrop-blur-md shrink-0">
+        <div class="flex items-center gap-2 sm:gap-3 min-w-0">
+            <span class="text-yellow-300 text-xl sm:text-2xl animate-pulse shrink-0"><i class="ph-fill ph-moon-stars"></i></span>
+            <div class="truncate">
+                <h1 class="font-gothic-title text-xs sm:text-base md:text-lg text-transparent bg-gradient-to-r from-yellow-200 via-purple-200 to-cyan-200 bg-clip-text tracking-wider leading-tight truncate">
                     Teatro del Mundo Invertido
                 </h1>
-                <p class="text-xs text-purple-300/80 italic hidden sm:block">
+                <p class="text-[11px] text-purple-300/80 italic hidden sm:block">
                     Obra oscura inspirada en la niebla, el misterio y la magia de la luna
                 </p>
             </div>
         </div>
 
-        <div class="flex items-center gap-2 sm:gap-3">
+        <div class="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
             <button id="btn-autoplay" onclick="toggleAutoplay()" title="Avance automático de cartel y escena"
-                class="px-3 py-1 rounded-full text-xs sm:text-sm border border-purple-400/40 bg-purple-950/60 text-purple-200 hover:border-yellow-300 hover:text-yellow-200 transition flex items-center gap-1.5">
-                <i id="icon-autoplay" class="ph ph-play-circle text-base"></i>
-                <span class="hidden md:inline">Auto-Función:</span>
+                class="px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs md:text-sm border border-purple-400/40 bg-purple-950/60 text-purple-200 hover:border-yellow-300 hover:text-yellow-200 transition flex items-center gap-1">
+                <i id="icon-autoplay" class="ph ph-play-circle text-sm sm:text-base"></i>
+                <span>Auto:</span>
                 <span id="text-autoplay" class="font-semibold">Off</span>
             </button>
 
             <button id="btn-audio" onclick="toggleAudio()" title="Activar/Silenciar Orquesta Gótica"
-                class="px-3 py-1 rounded-full text-xs sm:text-sm border border-yellow-500/40 bg-amber-950/50 text-yellow-200 hover:border-yellow-300 transition flex items-center gap-1.5">
-                <i id="icon-audio" class="ph-fill ph-speaker-high text-base text-yellow-300"></i>
-                <span id="text-audio" class="hidden sm:inline">Música</span>
+                class="px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs md:text-sm border border-yellow-500/40 bg-amber-950/50 text-yellow-200 hover:border-yellow-300 transition flex items-center gap-1">
+                <i id="icon-audio" class="ph-fill ph-speaker-high text-sm sm:text-base text-yellow-300"></i>
+                <span id="text-audio">Música</span>
             </button>
-
         </div>
     </header>
 
@@ -1094,30 +1060,30 @@
             </div>
         </div>
 
-        <div id="minimal-stage-hud" class="absolute bottom-2.5 inset-x-0 z-[45] flex flex-col items-center gap-2 px-3 pointer-events-none opacity-0 transition-opacity duration-700">
-            <div id="proposal-cta-wrapper" class="hidden pointer-events-auto mb-0.5 relative z-50">
-                <button type="button" onclick="acceptProposal()" class="btn-accept px-6 py-2 rounded-full font-gothic-title text-sm sm:text-base text-yellow-100 font-bold tracking-wider flex items-center gap-2 shadow-2xl cursor-pointer">
-                    <i class="ph-fill ph-heart text-rose-400 text-lg animate-bounce"></i>
-                    <span>💍 Si acepto hoy por siempre</span>
-                    <i class="ph-fill ph-sparkle text-yellow-300"></i>
+        <div id="minimal-stage-hud" class="absolute bottom-4 sm:bottom-3 inset-x-0 z-[45] flex flex-col items-center gap-2 px-2 sm:px-3 pointer-events-none opacity-0 transition-opacity duration-700">
+            <div id="proposal-cta-wrapper" class="hidden pointer-events-auto mb-1 relative z-50 max-w-[94vw]">
+                <button type="button" onclick="acceptProposal()" class="btn-accept px-5 sm:px-6 py-2 sm:py-2.5 rounded-full font-gothic-title text-xs sm:text-base text-yellow-100 font-bold tracking-wider flex items-center justify-center gap-2 shadow-[0_0_35px_rgba(250,204,21,0.85)] cursor-pointer">
+                    <i class="ph-fill ph-heart text-rose-400 text-base sm:text-lg animate-bounce shrink-0"></i>
+                    <span class="truncate">💍 Sí, acepto hoy por siempre</span>
+                    <i class="ph-fill ph-sparkle text-yellow-300 shrink-0"></i>
                 </button>
             </div>
 
-            <div class="pointer-events-auto flex items-center gap-2 sm:gap-4 px-4 py-1.5 rounded-full bg-[#06030d]/75 border border-yellow-500/35 backdrop-blur-md shadow-lg">
-                <button id="btn-prev-act" onclick="prevAct()" class="text-xs sm:text-sm text-purple-200 hover:text-yellow-300 flex items-center gap-1 transition">
+            <div class="pointer-events-auto flex items-center justify-between sm:justify-center gap-1.5 sm:gap-4 px-3 sm:px-4 py-1.5 rounded-full bg-[#06030d]/90 border border-yellow-500/45 backdrop-blur-md shadow-2xl max-w-[96vw]">
+                <button id="btn-prev-act" onclick="prevAct()" class="text-[11px] sm:text-sm text-purple-200 hover:text-yellow-300 flex items-center gap-1 transition px-1">
                     <i class="ph-bold ph-caret-left"></i>
-                    <span class="hidden sm:inline">Anterior</span>
+                    <span>Anterior</span>
                 </button>
 
                 <span class="h-3.5 w-[1px] bg-purple-700/50"></span>
 
-                <button onclick="reopenIntertitle()" class="text-xs sm:text-sm text-amber-200/90 hover:text-yellow-300 flex items-center gap-1.5 transition" title="Mostrar el cartel poético de este acto">
+                <button onclick="reopenIntertitle()" class="text-[11px] sm:text-sm text-amber-200/90 hover:text-yellow-300 flex items-center gap-1 transition px-1" title="Mostrar el cartel poético de este acto">
                     <i class="ph ph-scroll text-yellow-400"></i>
-                    <span id="hud-act-indicator" class="font-gothic-title text-xs">Acto I</span>
-                    <span class="text-purple-300/80 text-xs hidden md:inline">(Leer Cartel)</span>
+                    <span id="hud-act-indicator" class="font-gothic-title text-[11px] sm:text-xs">Acto I</span>
+                    <span class="text-purple-300/80 text-[10px] sm:text-xs">(Cartel)</span>
                 </button>
 
-                <div class="flex items-center gap-1.5 mx-1">
+                <div class="flex items-center gap-1 sm:gap-1.5 mx-0.5 sm:mx-1">
                     <span id="dot-0" class="w-2 h-2 rounded-full bg-yellow-400 transition-all"></span>
                     <span id="dot-1" class="w-2 h-2 rounded-full bg-purple-800 transition-all"></span>
                     <span id="dot-2" class="w-2 h-2 rounded-full bg-purple-800 transition-all"></span>
@@ -1126,8 +1092,8 @@
 
                 <span class="h-3.5 w-[1px] bg-purple-700/50"></span>
 
-                <button id="btn-next-act" onclick="nextAct()" class="px-3 py-1 rounded-full bg-purple-950/80 border border-yellow-500/50 hover:border-yellow-300 text-xs sm:text-sm text-yellow-100 font-semibold flex items-center gap-1.5 transition">
-                    <span id="btn-next-label">Siguiente Acto</span>
+                <button id="btn-next-act" onclick="nextAct()" class="px-2.5 sm:px-3 py-1 rounded-full bg-purple-950/90 border border-yellow-500/50 hover:border-yellow-300 text-[11px] sm:text-sm text-yellow-100 font-semibold flex items-center gap-1 transition">
+                    <span id="btn-next-label">Siguiente</span>
                     <i class="ph-bold ph-caret-right text-yellow-300"></i>
                 </button>
             </div>
@@ -2090,6 +2056,19 @@ const JACK_MUSIC_START_SECONDS = 0;
         function resizeCanvas() {
             canvas.width = canvas.parentElement.clientWidth;
             canvas.height = canvas.parentElement.clientHeight;
+
+            const svg = document.getElementById('stage-svg');
+            if (svg) {
+                const isPortraitMobile = window.innerWidth < 768 && window.innerHeight > window.innerWidth;
+                if (isPortraitMobile) {
+                    svg.setAttribute('viewBox', '230 40 740 680');
+                    svg.setAttribute('preserveAspectRatio', 'xMidYMid slice');
+                } else {
+                    svg.setAttribute('viewBox', '0 0 1200 720');
+                    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+                }
+            }
+
             initAtmosphere();
         }
 
