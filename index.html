@@ -57,15 +57,34 @@
         .curtain-panel {
             background: repeating-linear-gradient(
                 90deg,
-                #160208 0%,
-                #3b0413 4%,
+                #120106 0%,
+                #380412 4%,
                 #6e1125 8%,
-                #3b0413 12%,
-                #160208 16%
+                #380412 12%,
+                #120106 16%
             );
-            box-shadow: inset 0 -60px 100px rgba(0, 0, 0, 0.92), 0 0 70px rgba(0, 0, 0, 0.98);
+            box-shadow: inset 0 -60px 100px rgba(0, 0, 0, 0.94), 0 0 70px rgba(0, 0, 0, 0.98);
             transition: transform 2.4s cubic-bezier(0.65, 0, 0.35, 1);
             position: relative;
+            overflow: hidden;
+        }
+
+        .curtain-panel::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                radial-gradient(circle at 30px 30px, #fffbeb 0.8px, rgba(250, 204, 21, 0.75) 2px, transparent 5px),
+                radial-gradient(circle at 90px 90px, #ffffff 1px, rgba(254, 240, 138, 0.8) 2.5px, transparent 6px),
+                radial-gradient(circle at 60px 20px, rgba(253, 224, 71, 0.9) 0.8px, transparent 2.5px),
+                radial-gradient(circle at 20px 75px, rgba(253, 224, 71, 0.85) 0.9px, transparent 2.5px),
+                radial-gradient(circle at 105px 45px, rgba(254, 240, 138, 0.9) 0.7px, transparent 2px),
+                repeating-linear-gradient(45deg, transparent 0px, transparent 28px, rgba(250, 204, 21, 0.10) 29px, transparent 30px),
+                repeating-linear-gradient(-45deg, transparent 0px, transparent 28px, rgba(250, 204, 21, 0.10) 29px, transparent 30px);
+            background-size: 120px 120px, 120px 120px, 80px 80px, 95px 95px, 70px 70px, 60px 60px, 60px 60px;
+            opacity: 0.9;
+            animation: curtainShimmer 3.5s ease-in-out infinite alternate;
         }
 
         .curtain-panel::after {
@@ -79,6 +98,69 @@
                 linear-gradient(180deg, #fef08a 0px, #b45309 4px, transparent 4px),
                 repeating-linear-gradient(90deg, #d97706 0px, #fde047 4px, #78350f 8px, #451a03 12px);
             box-shadow: 0 6px 20px rgba(0,0,0,0.9);
+        }
+
+        .plaque-luxury {
+            background:
+                radial-gradient(circle at 50% 0%, rgba(250, 204, 21, 0.18), transparent 60%),
+                radial-gradient(circle at 50% 100%, rgba(147, 51, 234, 0.22), transparent 65%),
+                linear-gradient(165deg, rgba(18, 7, 34, 0.96) 0%, rgba(8, 3, 16, 0.98) 100%);
+            border: 2px solid rgba(234, 179, 8, 0.85);
+            box-shadow:
+                0 0 0 1px rgba(254, 240, 138, 0.25),
+                0 0 60px rgba(234, 179, 8, 0.25),
+                0 25px 90px rgba(0, 0, 0, 0.98),
+                inset 0 0 35px rgba(250, 204, 21, 0.12);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .plaque-luxury::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                radial-gradient(1.5px 1.5px at 15% 20%, #fef08a 80%, transparent 100%),
+                radial-gradient(1px 1px at 85% 18%, #ffffff 80%, transparent 100%),
+                radial-gradient(1.5px 1.5px at 22% 82%, #fef08a 80%, transparent 100%),
+                radial-gradient(1.2px 1.2px at 80% 76%, #c084fc 80%, transparent 100%),
+                radial-gradient(1px 1px at 50% 12%, #ffffff 80%, transparent 100%),
+                radial-gradient(1px 1px at 12% 50%, #fde047 80%, transparent 100%),
+                radial-gradient(1px 1px at 88% 48%, #fde047 80%, transparent 100%);
+            opacity: 0.85;
+            animation: starDrift 8s ease-in-out infinite alternate;
+        }
+
+        .plaque-luxury::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 45%;
+            height: 200%;
+            background: linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(254, 240, 138, 0.03) 35%,
+                rgba(254, 240, 138, 0.16) 50%,
+                rgba(254, 240, 138, 0.03) 65%,
+                transparent 100%
+            );
+            transform: rotate(25deg);
+            pointer-events: none;
+            animation: plaqueSweep 6.5s ease-in-out infinite;
+        }
+
+        @keyframes curtainShimmer {
+            0% { opacity: 0.55; filter: brightness(0.95); }
+            100% { opacity: 0.92; filter: brightness(1.3) drop-shadow(0 0 6px rgba(254, 240, 138, 0.5)); }
+        }
+
+        @keyframes plaqueSweep {
+            0%, 20% { left: -65%; opacity: 0; }
+            50% { opacity: 1; }
+            80%, 100% { left: 135%; opacity: 0; }
         }
 
         .curtain-open-left {
@@ -118,7 +200,7 @@
             position: absolute;
             inset: 0;
             pointer-events: none;
-            z-index: 9;
+            z-index: 32;
             background-image:
                 radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.9), transparent 100%),
                 radial-gradient(1.5px 1.5px at 36% 12%, rgba(167, 139, 250, 0.9), transparent 100%),
@@ -448,7 +530,7 @@
     <!-- ==========================================
          BARRA SUPERIOR DE CONTROLES DEL TEATRO
     =========================================== -->
-    <header class="w-full z-40 px-4 py-2 flex items-center justify-between bg-[#06030d]/90 border-b border-yellow-600/35 backdrop-blur-md">
+    <header class="w-full z-[45] px-4 py-2 flex items-center justify-between bg-[#06030d]/90 border-b border-yellow-600/35 backdrop-blur-md">
         <div class="flex items-center gap-3">
             <span class="text-yellow-300 text-2xl animate-pulse"><i class="ph-fill ph-moon-stars"></i></span>
             <div>
@@ -484,9 +566,9 @@
     <main id="stage-wrapper" class="relative flex-1 w-full h-full overflow-hidden flex items-center justify-center bg-[#040208]">
         <div class="portal-sheen absolute inset-0 z-10 pointer-events-none"></div>
         <div class="sky-sprinkles"></div>
-        <canvas id="sky-canvas" class="absolute inset-0 w-full h-full z-10 pointer-events-none"></canvas>
+        <canvas id="sky-canvas" class="absolute inset-0 w-full h-full z-[14] pointer-events-none"></canvas>
 
-        <div class="relative w-full h-full flex items-center justify-center z-15 overflow-hidden">
+        <div class="relative w-full h-full flex items-center justify-center z-10 overflow-hidden">
             <svg id="stage-svg" viewBox="0 0 1200 720" preserveAspectRatio="xMidYMid meet" class="w-full h-full">
                 <defs>
                     <radialGradient id="skyGrad" cx="50%" cy="35%" r="70%">
@@ -591,6 +673,9 @@
                     <path d="M -245,58 Q -85,32 65,68 T 255,48" stroke="#1a1033" stroke-width="6.5" fill="none" opacity="0.22" stroke-linecap="round" />
                     <path d="M -225,-72 Q -45,-98 115,-60 T 240,-75" stroke="#1a1033" stroke-width="4.5" fill="none" opacity="0.18" stroke-linecap="round" />
                 </g>
+
+                <!-- Capa de constelaciones: encima de la luna, debajo de la colina y los personajes -->
+                <g id="svg-constellations" opacity="1" style="transition: opacity 1.5s ease;"></g>
 
                 <g id="stage-lights" opacity="0.9">
                     <circle cx="360" cy="360" r="78" fill="#fbbf24" opacity="0.08" />
@@ -966,7 +1051,7 @@
         <div class="absolute inset-0 burton-vignette z-20"></div>
         <div class="absolute bottom-0 inset-x-0 h-24 footlight z-20 pointer-events-none"></div>
 
-        <div id="intertitle-overlay" class="intertitle-backdrop intertitle-hidden absolute inset-0 z-30 flex items-center justify-center p-4">
+        <div id="intertitle-overlay" class="intertitle-backdrop intertitle-hidden absolute inset-0 z-40 flex items-center justify-center p-4">
             <div class="w-full bg-[#090414]/95 border-2 border-yellow-500/80 rounded-[1.8rem] text-center shadow-[0_0_90px_rgba(0,0,0,0.98)] relative overflow-hidden">
                 <div class="frame-corner absolute top-3 left-3 border-t-2 border-l-2 border-yellow-400/80 rounded-tl-md"></div>
                 <div class="frame-corner absolute top-3 right-3 border-t-2 border-r-2 border-yellow-400/80 rounded-tr-md"></div>
@@ -1009,7 +1094,7 @@
             </div>
         </div>
 
-        <div id="minimal-stage-hud" class="absolute bottom-2.5 inset-x-0 z-40 flex flex-col items-center gap-2 px-3 pointer-events-none opacity-0 transition-opacity duration-700">
+        <div id="minimal-stage-hud" class="absolute bottom-2.5 inset-x-0 z-[45] flex flex-col items-center gap-2 px-3 pointer-events-none opacity-0 transition-opacity duration-700">
             <div id="proposal-cta-wrapper" class="hidden pointer-events-auto mb-0.5 relative z-50">
                 <button type="button" onclick="acceptProposal()" class="btn-accept px-6 py-2 rounded-full font-gothic-title text-sm sm:text-base text-yellow-100 font-bold tracking-wider flex items-center gap-2 shadow-2xl cursor-pointer">
                     <i class="ph-fill ph-heart text-rose-400 text-lg animate-bounce"></i>
@@ -1048,7 +1133,7 @@
             </div>
         </div>
 
-        <div id="celebration-overlay" class="hidden absolute top-3 inset-x-0 z-30 flex justify-center px-4 pointer-events-auto">
+        <div id="celebration-overlay" class="hidden absolute top-3 inset-x-0 z-40 flex justify-center px-4 pointer-events-auto">
             <div class="pointer-events-auto max-w-md w-full bg-gradient-to-b from-[#170929]/90 to-[#080312]/90 border-2 border-yellow-400/90 rounded-2xl p-4 text-center shadow-[0_0_55px_rgba(250,204,21,0.4)] backdrop-blur-md relative">
                 <button onclick="closeCelebrationOverlay()" class="absolute top-2.5 right-3 text-purple-300 hover:text-yellow-300 text-xs flex items-center gap-1" title="Ocultar cartel para ver la escena limpia">
                     <i class="ph ph-eye"></i> Ver Escena
@@ -1070,39 +1155,48 @@
             </div>
         </div>
 
-        <div id="curtain-container" class="absolute inset-0 z-35 flex pointer-events-auto overflow-hidden">
+        <div id="curtain-container" class="absolute inset-0 z-[25] flex pointer-events-auto overflow-hidden">
             <div id="curtain-left" class="curtain-panel w-1/2 h-full border-r-2 border-yellow-500/60"></div>
             <div id="curtain-right" class="curtain-panel w-1/2 h-full border-l-2 border-yellow-500/60"></div>
 
             <div id="start-plaque" class="absolute inset-0 flex items-center justify-center p-4 transition-all duration-1000">
-                <div class="max-w-md w-full bg-[#0b0416]/95 border-2 border-yellow-500/85 rounded-3xl p-6 sm:p-8 text-center shadow-[0_0_90px_rgba(0,0,0,0.98)] relative">
-                    <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-b from-yellow-300/25 to-purple-950/70 border border-yellow-400/70 flex items-center justify-center shadow-inner">
-                        <i class="ph-fill ph-moon-stars text-3xl text-yellow-300"></i>
+                <div class="plaque-luxury max-w-md w-full rounded-3xl p-6 sm:p-8 text-center relative">
+                    <div class="absolute top-3 left-3 w-7 h-7 border-t-2 border-l-2 border-yellow-400/80 rounded-tl-lg pointer-events-none"></div>
+                    <div class="absolute top-3 right-3 w-7 h-7 border-t-2 border-r-2 border-yellow-400/80 rounded-tr-lg pointer-events-none"></div>
+                    <div class="absolute bottom-3 left-3 w-7 h-7 border-b-2 border-l-2 border-yellow-400/80 rounded-bl-lg pointer-events-none"></div>
+                    <div class="absolute bottom-3 right-3 w-7 h-7 border-b-2 border-r-2 border-yellow-400/80 rounded-br-lg pointer-events-none"></div>
+
+                    <span class="absolute top-5 left-7 text-yellow-300/70 text-xs animate-pulse pointer-events-none">✦</span>
+                    <span class="absolute top-5 right-7 text-yellow-300/70 text-xs animate-pulse pointer-events-none">✦</span>
+
+                    <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-gradient-to-b from-yellow-300/25 to-purple-950/70 border border-yellow-400/80 flex items-center justify-center shadow-[0_0_25px_rgba(250,204,21,0.35)] relative">
+                        <i class="ph-fill ph-moon-stars text-3xl text-yellow-300 drop-shadow-[0_0_8px_rgba(254,240,138,0.8)]"></i>
                     </div>
 
                     <p class="text-xs uppercase tracking-[0.3em] text-yellow-400/90 mb-1 font-semibold">
-                        Gran Función Nocturna
+                        ✦ Gran Función Nocturna ✦
                     </p>
-                    <h2 class="font-gothic-title text-2xl sm:text-3xl text-yellow-100 mb-3 leading-tight">
+                    <h2 class="font-gothic-title text-2xl sm:text-3xl text-yellow-100 mb-3 leading-tight drop-shadow-[0_2px_10px_rgba(250,204,21,0.25)]">
                         El Extraño Amor Bajo la Luna en Espiral
                     </h2>
                     <p class="text-sm sm:text-base text-purple-200/90 italic mb-6 leading-relaxed">
                         Una fábula gótica en cuatro actos sobre dos almas destinadas a encontrarse entre la niebla, la música nocturna y una promesa brillante.
                     </p>
 
-                    <button onclick="startTheaterShow()" class="btn-accept w-full py-3.5 px-6 rounded-full font-gothic-title text-base sm:text-lg text-yellow-100 font-bold tracking-wider flex items-center justify-center gap-2.5 cursor-pointer">
-                        <i class="ph-fill ph-mask-happy text-xl text-yellow-300"></i>
+                    <button onclick="startTheaterShow()" class="btn-accept w-full py-3.5 px-6 rounded-full font-gothic-title text-base sm:text-lg text-yellow-100 font-bold tracking-wider flex items-center justify-center gap-2.5 cursor-pointer relative z-10">
+                        <i class="ph-fill ph-sparkle text-lg text-yellow-200 animate-spin" style="animation-duration: 6s;"></i>
                         <span>Abrir el Telón</span>
+                        <i class="ph-fill ph-mask-happy text-xl text-yellow-300"></i>
                     </button>
 
-                    <p class="text-xs text-purple-300/65 mt-4 flex items-center justify-center gap-1.5">
-                        <i class="ph ph-music-notes"></i> Vals gótico de celesta y cuerdas en vivo
+                    <p class="text-xs text-purple-300/75 mt-4 flex items-center justify-center gap-1.5">
+                        <i class="ph ph-music-notes text-yellow-400"></i> Vals gótico de celesta y cuerdas en vivo
                     </p>
                 </div>
             </div>
         </div>
 
-        <div class="valance absolute top-0 inset-x-0 h-7 sm:h-10 z-35 pointer-events-none flex justify-around items-end overflow-hidden">
+        <div class="valance absolute top-0 inset-x-0 h-7 sm:h-10 z-[28] pointer-events-none flex justify-around items-end overflow-hidden">
             <div class="w-20 h-4 rounded-t-full bg-black/35"></div>
             <div class="w-20 h-4 rounded-t-full bg-black/35"></div>
             <div class="w-20 h-4 rounded-t-full bg-black/35"></div>
@@ -1110,53 +1204,9 @@
             <div class="w-20 h-4 rounded-t-full bg-black/35"></div>
             <div class="w-20 h-4 rounded-t-full bg-black/35"></div>
         </div>
-        <div class="proscenium-border absolute inset-0 z-35 pointer-events-none"></div>
+        <div class="proscenium-border absolute inset-0 z-[28] pointer-events-none"></div>
 
     </main>
-
-    <div id="customize-modal" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="max-w-md w-full bg-[#100821] border-2 border-yellow-500/70 rounded-2xl p-6 shadow-2xl relative">
-            <button onclick="proposalFlowPending = false; closeCustomizeModal()" class="absolute top-4 right-4 text-purple-300 hover:text-yellow-300">
-                <i class="ph ph-x text-xl"></i>
-            </button>
-
-            <h3 class="font-gothic-title text-xl text-yellow-200 mb-1 flex items-center gap-2">
-                <i class="ph-fill ph-feather text-yellow-400"></i> Personalizar la Obra
-            </h3>
-            <p class="text-xs sm:text-sm text-purple-200/80 italic mb-4">
-                Personaliza los nombres de los protagonistas y la carta romántica final.
-            </p>
-
-            <div class="space-y-3 text-sm">
-                <div>
-                    <label class="block text-yellow-200/90 mb-1 font-semibold">Nombre de Él (Caballero Esqueleto):</label>
-                    <input id="input-groom" type="text" value="Jack" maxlength="25"
-                        class="w-full px-3 py-2 rounded-lg bg-black/60 border border-purple-500/40 text-white focus:outline-none focus:border-yellow-400">
-                </div>
-
-                <div>
-                    <label class="block text-yellow-200/90 mb-1 font-semibold">Nombre de Ella (Musa Encantada):</label>
-                    <input id="input-bride" type="text" value="Sally" maxlength="25"
-                        class="w-full px-3 py-2 rounded-lg bg-black/60 border border-purple-500/40 text-white focus:outline-none focus:border-yellow-400">
-                </div>
-
-                <div>
-                    <label class="block text-yellow-200/90 mb-1 font-semibold">Carta Romántica Final (Al aceptar el anillo):</label>
-                    <textarea id="input-custom-msg" rows="3" maxlength="260"
-                        class="w-full px-3 py-2 rounded-lg bg-black/60 border border-purple-500/40 text-white focus:outline-none focus:border-yellow-400">Para Jazmin: Hola mi vida hermosa, quiero que sepas que te amo mucho. Eres mi chiquita bella y hermosa. Quiero desearte un feliz 23 y, de nuevo, que te amo mucho, mucho. Que disfrutes este día especial junto a familiares y a la gente que te quiere muchísimo. Eres el amor de mi vida 💖. Ya puedes abrir tus regalos, mi chiquita hermosa, te amo. De parte de: Nahuel.</textarea>
-                </div>
-            </div>
-
-            <div class="mt-5 flex justify-end gap-2">
-                <button onclick="closeCustomizeModal()" class="px-4 py-2 rounded-full text-xs sm:text-sm text-purple-200 hover:bg-purple-900/40 transition">
-                    Cancelar
-                </button>
-                <button onclick="saveCustomization()" class="btn-gothic px-5 py-2 rounded-full text-xs sm:text-sm text-yellow-100 font-semibold">
-                    Guardar en el Guion
-                </button>
-            </div>
-        </div>
-    </div>
 
     <script>
         let groomName = "Jack";
@@ -1544,22 +1594,6 @@ const JACK_MUSIC_START_SECONDS = 0;
             }, 1150);
         }
 
-        function isCustomizeModalOpen() {
-            const modal = document.getElementById('customize-modal');
-            return !!modal && !modal.classList.contains('hidden');
-        }
-
-        function setCustomizeModalState(isOpen) {
-            const modal = document.getElementById('customize-modal');
-            if (!modal) return;
-
-            modal.classList.toggle('hidden', !isOpen);
-            modal.style.display = isOpen ? 'flex' : 'none';
-            modal.style.opacity = isOpen ? '1' : '0';
-            modal.setAttribute('aria-hidden', String(!isOpen));
-            syncProposalVisibility();
-        }
-
         function showProposalCTA() {
             const proposalWrapper = document.getElementById('proposal-cta-wrapper');
             if (!proposalWrapper) return;
@@ -1585,10 +1619,8 @@ const JACK_MUSIC_START_SECONDS = 0;
             if (!proposalWrapper) return;
 
             const shouldShowProposal = currentAct === 3 && !isCelebrationActive && !proposalFlowPending && proposalReadyToShow;
-            const modalIsOpen = isCustomizeModalOpen();
-            const isVisible = shouldShowProposal || modalIsOpen;
 
-            if (isVisible) {
+            if (shouldShowProposal) {
                 showProposalCTA();
             } else {
                 hideProposalCTA();
@@ -1707,6 +1739,7 @@ const JACK_MUSIC_START_SECONDS = 0;
             const floatingEmotions = document.getElementById('floating-emotions');
             const hillFlowers = document.getElementById('hill-flowers');
             const proposalWrapper = document.getElementById('proposal-cta-wrapper');
+            const svgConstellations = document.getElementById('svg-constellations');
 
             jackRoot.style.transition = "opacity 1.2s ease";
             sallyRoot.style.transition = "opacity 1.2s ease";
@@ -1955,6 +1988,20 @@ const JACK_MUSIC_START_SECONDS = 0;
             const icon = document.getElementById('icon-audio');
             const btn = document.getElementById('btn-audio');
 
+            if (jackAudio) {
+                jackAudio.muted = isMuted;
+                if (isMuted) {
+                    try { jackAudio.pause(); } catch (error) {}
+                } else if (showStarted) {
+                    try {
+                        if (jackAudio.paused) {
+                            const playPromise = jackAudio.play();
+                            if (playPromise && typeof playPromise.catch === 'function') playPromise.catch(() => {});
+                        }
+                    } catch (error) {}
+                }
+            }
+
             if (isMuted) {
                 icon.className = "ph ph-speaker-slash text-base text-rose-400";
                 btn.classList.replace('border-yellow-500/40', 'border-rose-500/40');
@@ -2030,48 +2077,6 @@ const JACK_MUSIC_START_SECONDS = 0;
             renderAct(0);
         }
 
-        function openCustomizeModal() {
-            const modal = document.getElementById('customize-modal');
-            if (!modal || !showStarted) return;
-
-            const inputs = {
-                groom: document.getElementById('input-groom'),
-                bride: document.getElementById('input-bride'),
-                msg: document.getElementById('input-custom-msg')
-            };
-
-            if (inputs.groom) inputs.groom.value = groomName;
-            if (inputs.bride) inputs.bride.value = brideName;
-            if (inputs.msg) inputs.msg.value = customFinalMessage;
-
-            proposalFlowPending = true;
-            setCustomizeModalState(true);
-        }
-
-        function closeCustomizeModal() {
-            proposalFlowPending = false;
-            setCustomizeModalState(false);
-        }
-
-        function saveCustomization() {
-            const gVal = document.getElementById('input-groom').value.trim();
-            const bVal = document.getElementById('input-bride').value.trim();
-            const mVal = document.getElementById('input-custom-msg').value.trim();
-
-            if (gVal) groomName = gVal;
-            if (bVal) brideName = bVal;
-            if (mVal) customFinalMessage = mVal;
-
-            closeCustomizeModal();
-            if (showStarted) {
-                renderAct(currentAct);
-                if (isCelebrationActive) {
-                    document.getElementById('celebration-title').textContent = `¡${groomName} & ${brideName}, Amor Eterno!`;
-                    document.getElementById('celebration-message').textContent = `"${customFinalMessage}"`;
-                }
-            }
-        }
-
         const canvas = document.getElementById('sky-canvas');
         const ctx = canvas.getContext('2d');
         let stars = [];
@@ -2080,6 +2085,7 @@ const JACK_MUSIC_START_SECONDS = 0;
         let petals = [];
         let bats = [];
         let fireworks = [];
+        let shootingStar = null;
 
         function resizeCanvas() {
             canvas.width = canvas.parentElement.clientWidth;
@@ -2091,39 +2097,94 @@ const JACK_MUSIC_START_SECONDS = 0;
             stars = [];
             constellations = [];
             fireflies = [];
-            const numStars = Math.max(42, Math.floor((canvas.width * canvas.height) / 7200));
+
+            const numStars = Math.max(210, Math.floor((canvas.width * canvas.height) / 4200));
             for (let i = 0; i < numStars; i++) {
+                const roll = Math.random();
+                let tier = 'micro';
+                if (roll > 0.955) {
+                    tier = 'hero';
+                } else if (roll > 0.83) {
+                    tier = 'medium';
+                }
+
                 stars.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * (canvas.height * 0.78),
-                    r: Math.random() * 1.6 + 0.45,
-                    alpha: Math.random() * 0.75 + 0.12,
-                    speed: Math.random() * 0.018 + 0.006,
-                    isCrossStar: Math.random() < 0.14,
-                    hue: Math.random() > 0.82 ? '#a5b4fc' : Math.random() > 0.5 ? '#fef3c7' : '#e2e8f0'
+                    tier: tier,
+                    r: tier === 'hero'
+                        ? (Math.random() * 0.8 + 1.35)
+                        : tier === 'medium'
+                            ? (Math.random() * 0.45 + 0.85)
+                            : (Math.random() * 0.55 + 0.35),
+                    speed: tier === 'hero'
+                        ? (Math.random() * 0.02 + 0.012)
+                        : (Math.random() * 0.03 + 0.008),
+                    phase: Math.random() * Math.PI * 2,
+                    hue: Math.random() > 0.82 ? '#c4b5fd' : Math.random() > 0.45 ? '#fef9c3' : '#ffffff'
                 });
             }
 
-            const groups = 9;
-            for (let i = 0; i < groups; i++) {
-                const points = Array.from({ length: 4 + Math.floor(Math.random() * 4) }, (_, idx) => ({
-                    x: canvas.width * (0.08 + Math.random() * 0.84),
-                    y: canvas.height * (0.08 + Math.random() * 0.46),
-                    dot: 1 + Math.random() * 2.3,
-                    offset: idx * 0.7
-                }));
-                constellations.push({ points, alpha: 0.05 + Math.random() * 0.18 });
+            const svgConstellations = document.getElementById('svg-constellations');
+            if (svgConstellations) {
+                svgConstellations.innerHTML = '';
+                const groups = 7;
+                for (let i = 0; i < groups; i++) {
+                    const startX = 1200 * (0.08 + Math.random() * 0.80);
+                    const startY = 720 * (0.06 + Math.random() * 0.40);
+                    const points = Array.from({ length: 4 + Math.floor(Math.random() * 3) }, (_, idx) => ({
+                        x: startX + (idx * (26 + Math.random() * 30)) * (Math.random() > 0.25 ? 1 : -1),
+                        y: startY + (Math.random() - 0.45) * 55,
+                        dot: 1.1 + Math.random() * 1.1,
+                        isMainNode: idx === 0 || Math.random() < 0.35
+                    }));
+
+                    for (let j = 1; j < points.length; j++) {
+                        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                        line.setAttribute('x1', points[j - 1].x);
+                        line.setAttribute('y1', points[j - 1].y);
+                        line.setAttribute('x2', points[j].x);
+                        line.setAttribute('y2', points[j].y);
+                        line.setAttribute('stroke', 'rgba(226, 232, 240, 0.28)');
+                        line.setAttribute('stroke-width', '0.85');
+                        line.setAttribute('stroke-dasharray', '2.5, 2.5');
+                        svgConstellations.appendChild(line);
+                    }
+
+                    points.forEach((point) => {
+                        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+
+                        if (point.isMainNode) {
+                            const arm = point.dot * 3.4;
+                            const cross = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                            cross.setAttribute('d', `M ${point.x - arm},${point.y} L ${point.x + arm},${point.y} M ${point.x},${point.y - arm} L ${point.x},${point.y + arm}`);
+                            cross.setAttribute('stroke', '#fef08a');
+                            cross.setAttribute('stroke-width', '0.65');
+                            cross.setAttribute('opacity', '0.8');
+                            g.appendChild(cross);
+                        }
+
+                        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                        circle.setAttribute('cx', point.x);
+                        circle.setAttribute('cy', point.y);
+                        circle.setAttribute('r', point.dot);
+                        circle.setAttribute('fill', '#ffffff');
+                        g.appendChild(circle);
+
+                        svgConstellations.appendChild(g);
+                    });
+                }
             }
 
-            for (let i = 0; i < 22; i++) {
+            for (let i = 0; i < 28; i++) {
                 fireflies.push({
                     x: Math.random() * canvas.width,
-                    y: canvas.height * (0.35 + Math.random() * 0.55),
-                    vx: (Math.random() - 0.5) * 0.56,
-                    vy: (Math.random() - 0.5) * 0.42,
-                    r: Math.random() * 2.5 + 1.2,
+                    y: canvas.height * (0.32 + Math.random() * 0.58),
+                    vx: (Math.random() - 0.5) * 0.45,
+                    vy: (Math.random() - 0.5) * 0.35,
+                    r: Math.random() * 1.8 + 0.9,
                     phase: Math.random() * Math.PI * 2,
-                    color: Math.random() > 0.3 ? '#fef08a' : '#5eead4'
+                    color: Math.random() > 0.28 ? '#fef08a' : '#5eead4'
                 });
             }
         }
@@ -2182,53 +2243,104 @@ const JACK_MUSIC_START_SECONDS = 0;
             updateParallax();
 
             stars.forEach(s => {
-                s.alpha += s.speed;
-                if (s.alpha > 1 || s.alpha < 0.2) s.speed = -s.speed;
+                s.phase += s.speed;
+                const twinkle = (Math.sin(s.phase) + 1) * 0.5;
 
                 ctx.save();
-                ctx.globalAlpha = Math.max(0.12, Math.min(1, s.alpha));
-                ctx.fillStyle = s.hue;
-                ctx.shadowColor = s.hue;
-                ctx.shadowBlur = 7;
-                ctx.beginPath();
-                ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-                ctx.fill();
-
-                if (s.isCrossStar) {
-                    ctx.strokeStyle = '#fef08a';
-                    ctx.lineWidth = 0.8;
-                    ctx.shadowBlur = 10;
+                if (s.tier === 'micro') {
+                    ctx.globalAlpha = 0.35 + twinkle * 0.65;
+                    ctx.fillStyle = s.hue;
                     ctx.beginPath();
-                    ctx.moveTo(s.x - s.r * 3.5, s.y);
-                    ctx.lineTo(s.x + s.r * 3.5, s.y);
-                    ctx.moveTo(s.x, s.y - s.r * 3.5);
-                    ctx.lineTo(s.x, s.y + s.r * 3.5);
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fill();
+                } else if (s.tier === 'medium') {
+                    const alpha = 0.3 + twinkle * 0.7;
+                    ctx.globalAlpha = alpha;
+                    ctx.fillStyle = s.hue;
+                    ctx.shadowColor = s.hue;
+                    ctx.shadowBlur = 5;
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    if (twinkle > 0.6) {
+                        const arm = s.r * (2.2 + twinkle * 1.8);
+                        ctx.strokeStyle = s.hue;
+                        ctx.lineWidth = 0.55;
+                        ctx.beginPath();
+                        ctx.moveTo(s.x - arm, s.y);
+                        ctx.lineTo(s.x + arm, s.y);
+                        ctx.moveTo(s.x, s.y - arm);
+                        ctx.lineTo(s.x, s.y + arm);
+                        ctx.stroke();
+                    }
+                } else {
+                    const alpha = 0.45 + twinkle * 0.55;
+                    const armLength = s.r * (4.2 + twinkle * 4.0);
+                    ctx.globalAlpha = alpha;
+                    ctx.fillStyle = '#ffffff';
+                    ctx.shadowColor = s.hue;
+                    ctx.shadowBlur = 12;
+
+                    ctx.beginPath();
+                    ctx.arc(s.x, s.y, s.r * (0.85 + twinkle * 0.25), 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.strokeStyle = s.hue;
+                    ctx.lineWidth = 0.85;
+                    ctx.lineCap = 'round';
+                    ctx.beginPath();
+                    ctx.moveTo(s.x - armLength, s.y);
+                    ctx.lineTo(s.x + armLength, s.y);
+                    ctx.moveTo(s.x, s.y - armLength);
+                    ctx.lineTo(s.x, s.y + armLength);
+                    ctx.stroke();
+
+                    const diag = armLength * 0.38;
+                    ctx.lineWidth = 0.5;
+                    ctx.beginPath();
+                    ctx.moveTo(s.x - diag, s.y - diag);
+                    ctx.lineTo(s.x + diag, s.y + diag);
+                    ctx.moveTo(s.x + diag, s.y - diag);
+                    ctx.lineTo(s.x - diag, s.y + diag);
                     ctx.stroke();
                 }
                 ctx.restore();
             });
 
-            constellations.forEach((group) => {
-                ctx.save();
-                ctx.strokeStyle = 'rgba(196, 181, 253, 0.22)';
-                ctx.lineWidth = 1;
-                group.points.forEach((point, index) => {
-                    if (index === 0) return;
-                    const prev = group.points[index - 1];
-                    ctx.beginPath();
-                    ctx.moveTo(prev.x, prev.y);
-                    ctx.lineTo(point.x, point.y);
-                    ctx.stroke();
-                });
+            if (!shootingStar && Math.random() < 0.003) {
+                shootingStar = {
+                    x: canvas.width * (0.15 + Math.random() * 0.55),
+                    y: canvas.height * (0.05 + Math.random() * 0.25),
+                    vx: 7 + Math.random() * 4,
+                    vy: 2.5 + Math.random() * 2,
+                    len: 55 + Math.random() * 35,
+                    alpha: 1
+                };
+            }
+            if (shootingStar) {
+                shootingStar.x += shootingStar.vx;
+                shootingStar.y += shootingStar.vy;
+                shootingStar.alpha -= 0.022;
 
-                group.points.forEach((point) => {
-                    ctx.fillStyle = 'rgba(255,255,255,0.8)';
-                    ctx.beginPath();
-                    ctx.arc(point.x, point.y, point.dot, 0, Math.PI * 2);
-                    ctx.fill();
-                });
+                ctx.save();
+                const grad = ctx.createLinearGradient(
+                    shootingStar.x, shootingStar.y,
+                    shootingStar.x - shootingStar.vx * 8, shootingStar.y - shootingStar.vy * 8
+                );
+                grad.addColorStop(0, `rgba(254, 240, 138, ${shootingStar.alpha})`);
+                grad.addColorStop(1, 'rgba(254, 240, 138, 0)');
+                ctx.strokeStyle = grad;
+                ctx.lineWidth = 1.6;
+                ctx.lineCap = 'round';
+                ctx.beginPath();
+                ctx.moveTo(shootingStar.x, shootingStar.y);
+                ctx.lineTo(shootingStar.x - shootingStar.vx * 8, shootingStar.y - shootingStar.vy * 8);
+                ctx.stroke();
                 ctx.restore();
-            });
+
+                if (shootingStar.alpha <= 0) shootingStar = null;
+            }
 
             fireflies.forEach(ff => {
                 ff.x += ff.vx;
@@ -2328,7 +2440,7 @@ const JACK_MUSIC_START_SECONDS = 0;
         }
 
         window.addEventListener('keydown', (e) => {
-            if (!showStarted || !document.getElementById('customize-modal').classList.contains('hidden')) return;
+            if (!showStarted) return;
             if (e.key === 'ArrowRight') nextAct();
             if (e.key === 'ArrowLeft') prevAct();
         });
